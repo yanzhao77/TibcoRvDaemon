@@ -1,4 +1,4 @@
-package com.chot.rvLister;
+package com.chot.test.demo;
 
 
 import com.chot.messageCheck.MessageReadCallback;
@@ -20,6 +20,7 @@ public class Rvlistener implements TibrvMsgCallback {
     static String response_subject;     //inbox 名称
 
     MessageReadCallback messageRead;
+    Map<String, List<TibrvRvdTransportParameter>> tibrvRvdTransportGroup;//备用机组
 
     public Rvlistener() {
         // open Tibrv in native implementation
@@ -30,6 +31,26 @@ public class Rvlistener implements TibrvMsgCallback {
             e.printStackTrace();
             System.exit(0);
         }
+    }
+
+    /**
+     * 主备检查
+     *
+     * @throws TibrvException
+     */
+    public TibrvRvdTransportParameter chackFailover() throws TibrvException {
+        if (getTibrvRvdTransportGroup().size() > 0) {
+            for (String key : getTibrvRvdTransportGroup().keySet()) {
+                List<TibrvRvdTransportParameter> transportParameterList = getTibrvRvdTransportGroup().get(key);
+                for (TibrvRvdTransportParameter tibrvRvdTranspor : transportParameterList) {
+                    if (!tibrvRvdTranspor.getService().equals(service) & !tibrvRvdTranspor.getNetwork().equals(network) &
+                            !tibrvRvdTranspor.getDaemon().equals(daemon)) {
+                        return tibrvRvdTranspor;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public void init(String... args) {
@@ -101,8 +122,16 @@ public class Rvlistener implements TibrvMsgCallback {
 
             // If timeout, reply message is null and query failed.
             if (reply_msg == null) {
-                System.err.println("Failed to detect server.");
-                System.exit(0);
+
+                try {
+                    TibrvRvdTransportParameter tibrvRvdTransportParameter = chackFailover();
+//                    rl.init(tibrvRvdTransportParameter.getService(), network, daemon, subject);
+                } catch (TibrvException e) {
+                    e.printStackTrace();
+                }
+
+//                System.err.println("Failed to detect server.");
+//                System.exit(0);
             }
             // Report finding a server.
             TibrvMsg server_msg = new TibrvMsg();
@@ -256,14 +285,38 @@ public class Rvlistener implements TibrvMsgCallback {
         this.startInbox = startInbox;
     }
 
-    public static void main(String[] args) {
+    public Map<String, List<TibrvRvdTransportParameter>> getTibrvRvdTransportGroup() throws TibrvException {
+        return tibrvRvdTransportGroup == null ? tibrvRvdTransportGroup = new HashMap<>() : tibrvRvdTransportGroup;
+    }
+
+    /**
+     * 添加备用机
+     *
+     * @param groupName
+     * @param tibrvRvdTransportGroup
+     * @throws TibrvException
+     */
+    public void setTibrvRvdTransportGroup(String groupName, TibrvRvdTransportParameter tibrvRvdTransportGroup) throws TibrvException {
+        List<TibrvRvdTransportParameter> transportParameterList = new ArrayList();
+        if (getTibrvRvdTransportGroup().get(groupName) == null) {
+            getTibrvRvdTransportGroup().put(groupName, transportParameterList);
+        } else {
+            transportParameterList = getTibrvRvdTransportGroup().get(groupName);
+        }
+        transportParameterList.add(tibrvRvdTransportGroup);
+    }
+
+    public static void main(String[] args) throws TibrvException {
         // 监听
         String service = "8210";
         String network = ";225.9.9.2";
         String daemon = "127.0.0.1:7500";
         String subject = "CHOT.G86.MES.TEST.PEMsvr2";
         Rvlistener rl = new Rvlistener();
-//        rl.setStartInbox(true);
+        rl.setStartInbox(true);
+        rl.setTibrvRvdTransportGroup("default", new TibrvRvdTransportParameter(service, network, daemon, subject));
+        rl.setTibrvRvdTransportGroup("default", new TibrvRvdTransportParameter(
+                service, network, daemon, subject));
         rl.init(service, network, daemon, subject);
     }
 

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config>
+    <TIBConfig Id="ConnectionConfig">
+        <Server>TEST 1.31.01</Server>
+        <Description>TEST Environment</Description>
+        <FieldName>xmlData</FieldName>
+        <TimeOut>130</TimeOut>
+        <OwnSubject>CHOT.G86.MES.TEST.OIC</OwnSubject>
+        <ListenSubjectList>
+            <SubjectName>CHOT.G86.MES.TEST.OIC</SubjectName>
+        </ListenSubjectList>
+        <TargetList>
+            <Target Name="QRY">
+                <Service>8510</Service>
+                <Network>;225.9.9.5</Network>
+                <TargetSubject>CHOT.G86.MES.TEST.QRYsvr</TargetSubject>
+                <DaemonList Owner="Default">
+                    <!-- this is default daemons. if localhost is not in the list, UI will use the default daemons. -->
+                    <Daemon Priority="1">tcp:10.50.10.72:7500</Daemon>
+                </DaemonList>
+            </Target>
+            <Target Name="CNM">
+                <Service>8410</Service>
+                <Network>;225.9.9.4</Network>
+                <TargetSubject>CHOT.G86.MES.TEST.CNMsvr</TargetSubject>
+                <DaemonList Owner="Default">
+                    <!-- this is default daemons. if localhost is not in the list, UI will use the default daemons. -->
+                    <Daemon Priority="1">tcp:10.50.10.72:7500</Daemon>
+                </DaemonList>
+            </Target>
+        </TargetList>
+    </TIBConfig>
+    <Log>
+        <Dir>Log</Dir>
+        <Duration>4</Duration>
+    </Log>
+</Config>
+

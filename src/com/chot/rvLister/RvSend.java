@@ -144,8 +144,8 @@ public class RvSend {
         // 发送
         String service = "8210";
         String network = ";225.9.9.2";
-        String daemon = "10.50.10.72:7500";
-        String subject = "CHOT.G86.MES.TEST.PEMsvr";
+        String daemon = "127.0.0.1:7500";
+        String subject = "CHOT.G86.MES.TEST.PEMsvr2";
         RvSend rl = new RvSend(service, network, daemon, subject, "hello world");
     }
 }

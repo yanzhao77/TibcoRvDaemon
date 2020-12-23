@@ -1,9 +1,8 @@
 package com.chot.messageCheck;
 
-import com.chot.entity.CheckecipeParameterRequest;
-import com.chot.entity.GetOicMainLotList;
 import com.chot.rvLister.Rvlistener;
-import com.chot.utils.ParseXML;
+
+import com.chot.utils.CustomThreadPoolExecutor;
 import com.chot.utils.XStreamUtil;
 import com.tibco.tibrv.TibrvMsg;
 
@@ -14,43 +13,38 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.tree.DefaultElement;
 
-import javax.xml.bind.JAXBContext;
-
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class XmlReadForCheck {
-    ParseXML parseXML;
-    XStreamUtil xStreamUtil;
-    MessageRead messageRead;// 设置回调验证消息
+public class XmlReadFactory {
+    MessageReadCallback messageRead;// 设置回调验证消息
     String checkMessageName;// 要拦截的消息名称
-    Object messageValue;// 抓取的消息obj
     Class MessageClass; // xml文件映射类
+    CustomThreadPoolExecutor customThreadPoolExecutor;//线程池
+    XMLreadService xmLreadService;
 
-    public XmlReadForCheck() {
+    public XmlReadFactory() {
 
-        parseXML = new ParseXML();
-        xStreamUtil = new XStreamUtil();
-        messageRead = new MessageRead() {
+        customThreadPoolExecutor = new CustomThreadPoolExecutor();
+        customThreadPoolExecutor.init();
+        messageRead = new MessageReadCallback() {
             @Override
             public void readMessage(TibrvMsg msg) {
                 String message = checkMessage(msg.toString());// message全文
-                String readMessageCheck = DocumentReadMessageCheck(message,
-                        msg, checkMessageName);// 取出xml正文
-
+                String readMessageCheck = DocumentReadMessageCheck(message, msg, checkMessageName);// 取出xml正文
                 if (readMessageCheck != null) {
-                    messageValue = xStreamUtil.toBean(readMessageCheck,
-                            MessageClass);
+                    customThreadPoolExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            xmLreadService.toJavaBan(readMessageCheck, MessageClass, msg);
+                        }
+                    });
                     // 如果xStream无法识别，就使用map解析
                     // Map<String, Object> objectMap =
-                    // parseXML.parserXml(message);
+                    // ParseXML.parserXml(message);
                     // messageValue = objectMap;
-
-                    if (messageValue != null) {
-                        println(messageValue);// 打印
-                    }
                 }
             }
         };
@@ -167,28 +161,6 @@ public class XmlReadForCheck {
         return null;
     }
 
-    /**
-     * 打印消息
-     *
-     * @param message
-     */
-    public void println(Object message) {
-        if (message instanceof GetOicMainLotList) {
-            GetOicMainLotList messageEntity = (GetOicMainLotList) message;
-
-            System.out.println(messageEntity.getBody().getFactoryName());
-            System.out.println(messageEntity.getBody().getMachineName());
-            System.out.println(messageEntity.getBody().getEventUser());
-            System.out.println(messageEntity.getBody().getSoftwareVersion());
-            System.out.println(messageEntity.getBody()
-                    .getTransactionStartTime());
-            System.out.println();
-        } else if (message instanceof CheckecipeParameterRequest) {
-            CheckecipeParameterRequest checkMessage = new CheckecipeParameterRequest();
-            System.out.println(checkMessage.getHeader().getMessageName());
-            System.out.println(checkMessage.getBody().getLineName());
-        }
-    }
 
     /**
      * 获取监听的消息名称，获取消息的实体类
@@ -228,6 +200,7 @@ public class XmlReadForCheck {
         services[2] = daemon;
         String[] args = concat(services, subjectNames);
         rl.init(args);
+        xmLreadService = new XMLreadService();
     }
 
 
@@ -249,11 +222,11 @@ public class XmlReadForCheck {
         return MessageClass;
     }
 
-    public MessageRead getMessageRead() {
+    public MessageReadCallback getMessageRead() {
         return messageRead;
     }
 
-    public void setMessageRead(MessageRead messageRead) {
+    public void setMessageRead(MessageReadCallback messageRead) {
         this.messageRead = messageRead;
     }
 

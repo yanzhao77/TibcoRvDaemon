@@ -28,7 +28,7 @@ public class ParseXML {
      * @return
      * @throws Exception
      */
-    public Map<String, Object> parserXml(String xml) {
+    public static Map<String, Object> parserXml(String xml) {
         StringReader reader = new StringReader(xml);
         // 创建一个新的SAXBuilder
         SAXReader sb = new SAXReader();
@@ -62,8 +62,8 @@ public class ParseXML {
      * @param list
      * @return
      */
-    private Map<String, Object> toMap(List<Element> elements,
-                                      List<Map<String, Object>> list) {
+    private static Map<String, Object> toMap(List<Element> elements,
+                                             List<Map<String, Object>> list) {
         //
         Element el = null;
         String name = "";
@@ -78,7 +78,7 @@ public class ParseXML {
                 // 继续递归循环
                 List<Map<String, Object>> sublist = new ArrayList<Map<String, Object>>();
                 //
-                Map<String, Object> subMap = this.toMap(el.elements(), sublist);
+                Map<String, Object> subMap = toMap(el.elements(), sublist);
                 // 根据key获取是否已经存在
                 Object object = map.get(name);
                 // 如果存在,合并
@@ -145,7 +145,7 @@ public class ParseXML {
         return null;
     }
 
-    public Map<String, Object> fromJavaBean(Object bean) {
+    public static Map<String, Object> fromJavaBean(Object bean) {
         if (null == bean)
             return null;
 
@@ -162,7 +162,7 @@ public class ParseXML {
         return null;
     }
 
-    public <T> T toJavaBean(Class<?> clazz, Map map) {
+    public static <T> T toJavaBean(Class<?> clazz, Map map) {
         try {
             T newBeanInstance = (T) clazz.newInstance();
 
@@ -185,8 +185,8 @@ public class ParseXML {
      * @param messageName
      * @return
      */
-    public boolean checkMapForMessageName(Map<String, Object> result,
-                                          String messageName) {
+    public static boolean checkMapForMessageName(Map<String, Object> result,
+                                                 String messageName) {
         List<Map<String, String>> headerMapList = (List<Map<String, String>>) result
                 .get("HEADER");
         for (Map<String, String> headerMap : headerMapList) {

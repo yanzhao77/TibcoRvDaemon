@@ -5,7 +5,7 @@ import com.tibco.tibrv.TibrvMsg;
 /**
  * 消息监听
  */
-public interface MessageRead {
+public interface MessageReadCallback {
 
     /**
      * 接收消息并处理

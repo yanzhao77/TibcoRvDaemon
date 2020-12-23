@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Dom4JDriver;
 
 import java.io.*;
+import java.text.DecimalFormat;
 
 /**
  * @version 1.0
@@ -32,7 +33,7 @@ public class XStreamUtil {
     public <T> T toBean(String xmlStr, Class<T> cls) {
         xStream.setClassLoader(cls.getClassLoader());
         xStream.processAnnotations(cls);
-		T obj = (T) xStream.fromXML(xmlStr);
+        T obj = (T) xStream.fromXML(xmlStr);
         return obj;
     }
 
@@ -126,4 +127,31 @@ public class XStreamUtil {
         }
     }
 
+    /**
+     * byte转化为KB、MB、GB
+     *
+     * @param size
+     * @return
+     */
+    public static String getNetFileSizeDescription(long size) {
+        StringBuffer bytes = new StringBuffer();
+        DecimalFormat format = new DecimalFormat("###.0");
+        if (size >= 1024 * 1024 * 1024) {
+            double i = (size / (1024.0 * 1024.0 * 1024.0));
+            bytes.append(format.format(i)).append("GB");
+        } else if (size >= 1024 * 1024) {
+            double i = (size / (1024.0 * 1024.0));
+            bytes.append(format.format(i)).append("MB");
+        } else if (size >= 1024) {
+            double i = (size / (1024.0));
+            bytes.append(format.format(i)).append("KB");
+        } else if (size < 1024) {
+            if (size <= 0) {
+                bytes.append("0B");
+            } else {
+                bytes.append((int) size).append("B");
+            }
+        }
+        return bytes.toString();
+    }
 }
