@@ -1,10 +1,8 @@
-package com.chot.entity;
+package com.chot.messageEntity;
 
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-
-import java.util.List;
 
 
 @XStreamAlias("MESSAGE")

@@ -1,4 +1,5 @@
-package com.chot.rvLister;
+package com.chot.test.demo3;
+
 
 import com.chot.messageCheck.MessageReadCallback;
 import com.chot.daesonEntity.TibrvRvdTransportParameter;
@@ -31,14 +32,16 @@ public class Rvlistener implements TibrvMsgCallback {
      */
     public void start() {
         TibrvQueue tibrvQueue = Tibrv.defaultQueue();
-
-        boolean isStartTransport = false;//判断是否启动成功
-
+        boolean isStartTransport = true;
         for (String key : transportGroup.keySet()) {
             List<TibrvRvdTransportParameter> transportParameterList = new ArrayList<>();
             transportParameterList.addAll(transportGroup.get(key));
             //如果key是默认机组，那么启动所有的Transport，如果不是，就只启动一个
-
+//            if (key.equals("default")) {
+//                transportParameterList.addAll(transportGroup.get(key));
+//            } else {
+//                transportParameterList.add(transportGroup.get(key).get(0));
+//            }
             for (TibrvRvdTransportParameter transportParameter : transportParameterList) {
                 if (!key.equals("default") & isStartTransport) {
                     continue;
@@ -55,6 +58,13 @@ public class Rvlistener implements TibrvMsgCallback {
                             "\tDaemon:" + transportParameter.getDaemon() +
                             "\t" + "is not connect");
                     //如果这个备份机不可用，就启动其他的，
+//                    if (transportGroup.get(key).indexOf(transportParameter) <= transportGroup.get(key).size() - 1) {
+////                        transportParameterList.clear();
+//                        transportParameterList.add(transportGroup.get(key).get(transportGroup.get(key).indexOf(transportParameter) + 1));
+//                    } else {
+//                        System.err.println("无备份机可用");
+//                        System.exit(0);
+//                    }
                     isStartTransport = false;
                     continue;//启用备用机组
                 }
@@ -96,7 +106,7 @@ public class Rvlistener implements TibrvMsgCallback {
                     }
 
                     TibrvMsg reply_msg = null;
-                    //向主机发送消息，并接受消息，确认连通
+                    //向主机发送消息，并接受消息
                     try {
                         reply_msg = transport.sendRequest(query_msg, 10);
                     } catch (TibrvException e) {
@@ -171,57 +181,12 @@ public class Rvlistener implements TibrvMsgCallback {
         if (messageRead != null)
             messageRead.onMsg(listener, msg);
 //        if (msg.toString().equals("GetOicMainLotList")) {
-//        System.out.println((new Date()).toString() +
-//                ": subject=" + msg.getSendSubject() + ", reply=" + msg.getReplySubject());
+        System.out.println((new Date()).toString() +
+                ": subject=" + msg.getSendSubject() + ", reply=" + msg.getReplySubject());
 //        }
         System.out.flush();
     }
 
-
-    /**
-     * 创建实例化的tTibrvRvdTransport数组
-     *
-     * @param service
-     * @param network
-     * @param daemon
-     * @param subject
-     */
-    public TibrvRvdTransportParameter setTransportParameter(String groupName, String messageName, String service, String network,
-                                                            String daemon, boolean isStartInbox, String... subject) {
-        TibrvRvdTransportParameter parameter = new TibrvRvdTransportParameter(messageName, service, network, daemon, subject);
-        Map<String, List<TibrvRvdTransportParameter>> listMap = getTransportGroup();
-
-        List<TibrvRvdTransportParameter> parameterList;
-        if (groupName == null) {
-            groupName = parameter.getGroupName();
-        }
-        parameter.setStartInbox(isStartInbox);
-        parameter.setGroupName(groupName);
-        parameterList = listMap.get(groupName);
-
-        if (parameterList == null) {
-            parameterList = new ArrayList<>();
-            listMap.put(groupName, parameterList);
-        }
-        parameterList.add(parameter);
-        return parameter;
-    }
-
-    /**
-     * 带有主备机制的消息组
-     *
-     * @param transportGroup
-     * @param messageName
-     * @param subject
-     */
-    public void setTransportParameterGroup(Map<String, List<String[]>> transportGroup, String messageName, boolean isStartInbox, String... subject) {
-        for (String key : transportGroup.keySet()) {
-            List<String[]> transportParameterList = transportGroup.get(key);
-            for (String[] parameterArr : transportParameterList) {
-                setTransportParameter(key, messageName, parameterArr[0], parameterArr[1], parameterArr[2], isStartInbox, subject);
-            }
-        }
-    }
 
     public MessageReadCallback getMessageRead() {
         return messageRead;
@@ -252,20 +217,19 @@ public class Rvlistener implements TibrvMsgCallback {
         Rvlistener rl = new Rvlistener();
 
         // 监听多个subject
-        String service = "8400";
-        String network = ";225.16.16.4";
-        String daemon = "tcp:10.50.10.66:7500";
-        String subjectACFCNMsvr = "CHOT.G86.ACFMES.PROD.CNMsvr";
-        String subjectOCCNMsvr = "CHOT.G86.OCMES.PROD.CNMsvr";
-        String subjectCommonCNMsvr = "CHOT.G86.MES.PROD.CNMsvr";
-//        String service = "8210";
-//        String network = ";225.9.9.2";
-//        String daemon = "127.0.0.1:7500";
-//        String subject = "CHOT.G86.MES.TEST.PEMsvr";
+//        String service = "8400";
+//        String network = ";225.16.16.4";
+//        String daemon = "tcp:10.50.10.66:7500";
+//        String subjectACFCNMsvr = "CHOT.G86.ACFMES.PROD.CNMsvr";
+//        String subjectOCCNMsvr = "CHOT.G86.OCMES.PROD.CNMsvr";
+//        String subjectCommonCNMsvr = "CHOT.G86.MES.PROD.CNMsvr";
+        String service = "8210";
+        String network = ";225.9.9.2";
+        String daemon = "127.0.0.1:7500";
+        String subject = "CHOT.G86.MES.TEST.PEMsvr2";
 
         String messageName = "GetOicMainLotList";// 要拦截的message的名称
-        rl.setTransportParameter(null, messageName, service, network, daemon, false,
-                subjectACFCNMsvr, subjectOCCNMsvr, subjectCommonCNMsvr);
+        rl.setTransportParameter(null, messageName, service, network, daemon, true, subject);
 
         //再启动一个线程监听
         String serviceTEST = "8200";
@@ -283,4 +247,48 @@ public class Rvlistener implements TibrvMsgCallback {
 
     }
 
+    /**
+     * 创建实例化的tTibrvRvdTransport数组
+     *
+     * @param service
+     * @param network
+     * @param daemon
+     * @param subject
+     */
+    public TibrvRvdTransportParameter setTransportParameter(String groupName, String messageName, String service, String network, String daemon, boolean isStartInbox, String... subject) {
+        TibrvRvdTransportParameter parameter = new TibrvRvdTransportParameter(messageName, service, network, daemon, subject);
+        Map<String, List<TibrvRvdTransportParameter>> listMap = getTransportGroup();
+
+        List<TibrvRvdTransportParameter> parameterList;
+        if (groupName == null) {
+            groupName = parameter.getGroupName();
+        }
+        parameter.setStartInbox(isStartInbox);
+        parameter.setGroupName(groupName);
+        parameterList = listMap.get(groupName);
+
+        if (parameterList == null) {
+            parameterList = new ArrayList<>();
+            listMap.put(groupName, parameterList);
+        }
+        parameterList.add(parameter);
+        return parameter;
+    }
+
+    /**
+     * 带有主备机制的消息组
+     *
+     * @param transportGroup
+     * @param messageName
+     * @param subject
+     */
+    public void setTransportParameterGroup(Map<String, List<String[]>> transportGroup, String messageName, boolean isStartInbox, String... subject) {
+        for (String key : transportGroup.keySet()) {
+            List<String[]> transportParameterList = transportGroup.get(key);
+            for (String[] parameterArr : transportParameterList) {
+                TibrvRvdTransportParameter parameter = setTransportParameter(key, messageName,
+                        parameterArr[0], parameterArr[1], parameterArr[2], isStartInbox, subject);
+            }
+        }
+    }
 }

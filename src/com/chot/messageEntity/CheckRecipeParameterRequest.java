@@ -1,4 +1,4 @@
-package com.chot.entity;
+package com.chot.messageEntity;
 
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XStreamAlias("MESSAGE")
-public class CheckecipeParameterRequest {
+public class CheckRecipeParameterRequest {
     @XStreamAlias("HEADER")//别名，在xml中的名字
     @XStreamAsAttribute//如果是属性值，就加标识
-    Header header;
+            Header header;
 
     @XStreamAlias("BODY")
     @XStreamAsAttribute
@@ -21,7 +21,7 @@ public class CheckecipeParameterRequest {
     @XStreamAsAttribute
     Header.ReturnMessage Return;
 
-    public CheckecipeParameterRequest() {
+    public CheckRecipeParameterRequest() {
     }
 
 

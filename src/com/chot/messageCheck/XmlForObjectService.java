@@ -4,6 +4,7 @@ import com.chot.rvLister.Rvlistener;
 import com.chot.utils.CustomThreadPoolExecutor;
 import com.chot.utils.XStreamUtil;
 
+import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -16,10 +17,10 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Created by yan34177
  */
 public class XmlForObjectService {
-
+    XmlReadFactory xmlReadForCheck;
 
     public XmlForObjectService() {
-
+        xmlReadForCheck = new XmlReadFactory();
     }
 
     /**
@@ -31,14 +32,29 @@ public class XmlForObjectService {
      * @param daemon
      * @param subjectNames     监听的频道参数
      */
-    public void rvListenerInit(String checkMessageName, String service, String network, String daemon, String... subjectNames) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                XmlReadFactory xmlReadForCheck = new XmlReadFactory();
-                xmlReadForCheck.init(checkMessageName, service, network, daemon, subjectNames);
-            }
-        });
-        thread.start();
+    public void rvListenerInit(String checkMessageName, String service, String network,
+                               String daemon, boolean isStartInbox, String... subjectNames) {
+        xmlReadForCheck.init(checkMessageName, service, network, daemon, isStartInbox, subjectNames);
+    }
+
+    /**
+     * 主备机组监听
+     *
+     * @param groupName
+     * @param checkMessageName
+     * @param serviceList
+     * @param isStartInbox
+     * @param subjectNames
+     */
+    public void rvListenerGroupInit(String groupName, String checkMessageName, List<String[]> serviceList,
+                                    boolean isStartInbox, String... subjectNames) {
+        xmlReadForCheck.initGroups(groupName, checkMessageName, serviceList, isStartInbox, subjectNames);
+    }
+
+    /**
+     * 启动监听
+     */
+    public void start() {
+        xmlReadForCheck.start();
     }
 }

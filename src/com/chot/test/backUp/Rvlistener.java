@@ -1,15 +1,17 @@
-package com.chot.test.demo;
+package com.chot.test.backUp;
 
 
 import com.chot.messageCheck.MessageReadCallback;
-import com.chot.daesonEntity.TibrvRvdTransportParameter;
 import com.tibco.tibrv.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Rvlistener {
+public class Rvlistener implements TibrvMsgCallback {
 
     String service = null;
     String network = null;
@@ -19,8 +21,7 @@ public class Rvlistener {
     static String query_subject;   // To find the server 服务器
     static String response_subject;     //inbox 名称
 
-    MessageReadCallback messageReadCallback;//消息接收和处理
-    Map<String, List<TibrvRvdTransportParameter>> tibrvRvdTransportGroup;//备用机组
+    MessageReadCallback messageRead;
 
     public Rvlistener() {
         // open Tibrv in native implementation
@@ -31,26 +32,6 @@ public class Rvlistener {
             e.printStackTrace();
             System.exit(0);
         }
-    }
-
-    /**
-     * 主备检查
-     *
-     * @throws TibrvException
-     */
-    public TibrvRvdTransportParameter chackFailover() throws TibrvException {
-        if (getTibrvRvdTransportGroup().size() > 0) {
-            for (String key : getTibrvRvdTransportGroup().keySet()) {
-                List<TibrvRvdTransportParameter> transportParameterList = getTibrvRvdTransportGroup().get(key);
-                for (TibrvRvdTransportParameter tibrvRvdTranspor : transportParameterList) {
-                    if (!tibrvRvdTranspor.getService().equals(service) & !tibrvRvdTranspor.getNetwork().equals(network) &
-                            !tibrvRvdTranspor.getDaemon().equals(daemon)) {
-                        return tibrvRvdTranspor;
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     public void init(String... args) {
@@ -70,7 +51,6 @@ public class Rvlistener {
         TibrvTransport transport = null;
         try {
             transport = new TibrvRvdTransport(service, network, daemon);
-            System.out.println(transport.isValid());
         } catch (TibrvException e) {
             System.err.println("Failed to create TibrvRvdTransport:");
             e.printStackTrace();
@@ -87,7 +67,8 @@ public class Rvlistener {
             System.exit(0);
         }
 
-        if (startInbox) {//如果开启点对点通信，就创建
+        if (startInbox) {
+            //如果开启点对点通信，就创建
             // Create an inbox subject for communication with the server and
             // create a listener for this response subject.
             //创建与服务器通信的收件箱主题，并为此响应主题创建侦听器。
@@ -95,7 +76,7 @@ public class Rvlistener {
                 query_subject = args[i];
                 response_subject = transport.createInbox();
                 new TibrvListener(tibrvQueue,//创建inbox监听
-                        messageReadCallback, transport, response_subject, null);
+                        this, transport, response_subject, null);
             } catch (TibrvException e) {
                 System.err.println("Failed to create listener:");
                 e.printStackTrace();
@@ -123,16 +104,8 @@ public class Rvlistener {
 
             // If timeout, reply message is null and query failed.
             if (reply_msg == null) {
-
-                try {
-                    TibrvRvdTransportParameter tibrvRvdTransportParameter = chackFailover();
-//                    rl.init(tibrvRvdTransportParameter.getService(), network, daemon, subject);
-                } catch (TibrvException e) {
-                    e.printStackTrace();
-                }
-
-//                System.err.println("Failed to detect server.");
-//                System.exit(0);
+                System.err.println("Failed to detect server.");
+                System.exit(0);
             }
             // Report finding a server.
             TibrvMsg server_msg = new TibrvMsg();
@@ -154,7 +127,7 @@ public class Rvlistener {
             while (i < args.length) {
                 // create listener using default queue
                 try {
-                    new TibrvListener(tibrvQueue, messageReadCallback, transport,
+                    new TibrvListener(tibrvQueue, this, transport,
                             args[i], null);
                     System.err.println("Listening on: " + args[i]);
                 } catch (TibrvException e) {
@@ -181,8 +154,6 @@ public class Rvlistener {
         }
     }
 
-
-    @Deprecated
     public void onMsg(TibrvListener listener, TibrvMsg msg) {
         System.out.println((new Date()).toString() +
                 ": subject=" + msg.getSendSubject() +
@@ -190,8 +161,8 @@ public class Rvlistener {
                 ", message=" + msg.toString()
         );
 //        List<String> messagename = match(msg.toString(), "MESSAGENAME");
-//        if (messageRead != null)
-//            messageRead.readMessage(msg);
+        if (messageRead != null)
+            messageRead.onMsg(listener, msg);
 
         System.out.flush();
     }
@@ -273,11 +244,11 @@ public class Rvlistener {
     }
 
     public MessageReadCallback getMessageRead() {
-        return messageReadCallback;
+        return messageRead;
     }
 
     public void setMessageRead(MessageReadCallback messageRead) {
-        this.messageReadCallback = messageRead;
+        this.messageRead = messageRead;
     }
 
     public boolean isStartInbox() {
@@ -288,38 +259,14 @@ public class Rvlistener {
         this.startInbox = startInbox;
     }
 
-    public Map<String, List<TibrvRvdTransportParameter>> getTibrvRvdTransportGroup() throws TibrvException {
-        return tibrvRvdTransportGroup == null ? tibrvRvdTransportGroup = new HashMap<>() : tibrvRvdTransportGroup;
-    }
-
-    /**
-     * 添加备用机
-     *
-     * @param groupName
-     * @param tibrvRvdTransportGroup
-     * @throws TibrvException
-     */
-    public void setTibrvRvdTransportGroup(String groupName, TibrvRvdTransportParameter tibrvRvdTransportGroup) throws TibrvException {
-        List<TibrvRvdTransportParameter> transportParameterList = new ArrayList();
-        if (getTibrvRvdTransportGroup().get(groupName) == null) {
-            getTibrvRvdTransportGroup().put(groupName, transportParameterList);
-        } else {
-            transportParameterList = getTibrvRvdTransportGroup().get(groupName);
-        }
-        transportParameterList.add(tibrvRvdTransportGroup);
-    }
-
-    public static void main(String[] args) throws TibrvException {
+    public static void main(String[] args) {
         // 监听
         String service = "8210";
         String network = ";225.9.9.2";
         String daemon = "127.0.0.1:7500";
         String subject = "CHOT.G86.MES.TEST.PEMsvr2";
         Rvlistener rl = new Rvlistener();
-        rl.setStartInbox(true);
-        rl.setTibrvRvdTransportGroup("default", new TibrvRvdTransportParameter(service, network, daemon, new String[]{subject}));
-        rl.setTibrvRvdTransportGroup("default", new TibrvRvdTransportParameter(
-                service, network, daemon, new String[]{subject}));
+//        rl.setStartInbox(true);
         rl.init(service, network, daemon, subject);
     }
 

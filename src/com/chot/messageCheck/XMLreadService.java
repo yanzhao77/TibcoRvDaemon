@@ -1,5 +1,7 @@
 package com.chot.messageCheck;
 
+import com.chot.messageEntity.CheckRecipeParameterRequest;
+import com.chot.messageEntity.GetOicMainLotList;
 import com.chot.utils.XStreamUtil;
 import com.tibco.tibrv.TibrvMsg;
 
@@ -35,8 +37,8 @@ public class XMLreadService {
         Thread thread = Thread.currentThread();
         System.err.println("线程ID：" + thread.getId() + "\t线程名称：" + thread.getName());
         System.err.println(message.getSendSubject());
-//        if (message instanceof GetOicMainLotList) {
-//            GetOicMainLotList messageEntity = (GetOicMainLotList) message;
+//        if (messageValue instanceof GetOicMainLotList) {
+//            GetOicMainLotList messageEntity = (GetOicMainLotList) messageValue;
 //
 //            System.out.println(messageEntity.getBody().getFactoryName());
 //            System.out.println(messageEntity.getBody().getMachineName());
@@ -45,8 +47,8 @@ public class XMLreadService {
 //            System.out.println(messageEntity.getBody()
 //                    .getTransactionStartTime());
 //            System.out.println();
-//        } else if (message instanceof CheckecipeParameterRequest) {
-//            CheckecipeParameterRequest checkMessage = new CheckecipeParameterRequest();
+//        } else if (messageValue instanceof CheckRecipeParameterRequest) {
+//            CheckRecipeParameterRequest checkMessage = (CheckRecipeParameterRequest) messageValue;
 //            System.out.println(checkMessage.getHeader().getMessageName());
 //            System.out.println(checkMessage.getBody().getLineName());
 //        }

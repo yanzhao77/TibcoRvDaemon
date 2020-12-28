@@ -3,7 +3,7 @@ package com.chot.messageCheck;
 import com.chot.rvLister.Rvlistener;
 
 import com.chot.utils.CustomThreadPoolExecutor;
-import com.chot.utils.XStreamUtil;
+import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
 
 import org.dom4j.Attribute;
@@ -24,28 +24,35 @@ public class XmlReadFactory {
     Class MessageClass; // xml文件映射类
     CustomThreadPoolExecutor customThreadPoolExecutor;//线程池
     XMLreadService xmLreadService;
+    Rvlistener rvlistener;
+
 
     public XmlReadFactory() {
-
+        rvlistener = new Rvlistener();
         customThreadPoolExecutor = new CustomThreadPoolExecutor();
         customThreadPoolExecutor.init();
         messageRead = new MessageReadCallback() {
             @Override
-            public void readMessage(TibrvMsg msg) {
-                String message = checkMessage(msg.toString());// message全文
-                String readMessageCheck = DocumentReadMessageCheck(message, msg, checkMessageName);// 取出xml正文
-                if (readMessageCheck != null) {
-                    customThreadPoolExecutor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            xmLreadService.toJavaBan(readMessageCheck, MessageClass, msg);
+            public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
+                //如果有消息传入，则分配一个线程执行消息处理
+                customThreadPoolExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = checkMessage(tibrvMsg.toString());// message全文
+                        if (checkMessageName == null) {
+                            System.out.println(message);
+                            return;
                         }
-                    });
-                    // 如果xStream无法识别，就使用map解析
-                    // Map<String, Object> objectMap =
-                    // ParseXML.parserXml(message);
-                    // messageValue = objectMap;
-                }
+                        String readMessageCheck = DocumentReadMessageCheck(message, tibrvMsg, checkMessageName);// 取出xml正文
+                        if (readMessageCheck != null) {
+                            xmLreadService.toJavaBan(readMessageCheck, MessageClass, tibrvMsg);
+                        }
+                        // 如果xStream无法识别，就使用map解析
+                        // Map<String, Object> objectMap =
+                        // ParseXML.parserXml(message);
+                        // messageValue = objectMap;
+                    }
+                });
             }
         };
     }
@@ -170,11 +177,19 @@ public class XmlReadFactory {
      */
     public <T> void rvlistenerInit(String checkMessageName)
             throws ClassNotFoundException {
+        if (checkMessageName == null) return;
         setCheckMessageName(checkMessageName);
         this.MessageClass = Class
-                .forName("com.chot.entity." + checkMessageName);
+                .forName("com.chot.messageEntity." + checkMessageName);
     }
 
+    /**
+     * 启动监听
+     */
+    public void start() {
+        xmLreadService = new XMLreadService();
+        rvlistener.start();
+    }
 
     /**
      * 初始化监听，并启动监听
@@ -183,26 +198,46 @@ public class XmlReadFactory {
      * @param service
      * @param network
      * @param daemon
+     * @param isStartInbox
      * @param subjectNames     监听的频道参数
      */
-    public void init(String checkMessageName, String service, String network, String daemon, String... subjectNames) {
+    public void init(String checkMessageName, String service, String network, String daemon, boolean isStartInbox, String... subjectNames) {
         try {
             rvlistenerInit(checkMessageName);
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Rvlistener rl = new Rvlistener();
-        rl.setMessageRead(getMessageRead());
-        String[] services = new String[3];
-        services[0] = service;
-        services[1] = network;
-        services[2] = daemon;
-        String[] args = concat(services, subjectNames);
-        rl.init(args);
-        xmLreadService = new XMLreadService();
+        rvlistener.setMessageRead(getMessageRead());
+//        String[] services = new String[]{service, network, daemon};
+//        String[] args = concat(services, subjectNames);
+        rvlistener.setTransportParameter(null, checkMessageName, service, network, daemon, isStartInbox, subjectNames);
+
+
     }
 
+    /**
+     * 初始化机组监听，并启动监听
+     *
+     * @param groupName        主备机组名称
+     * @param checkMessageName 监听的消息名称
+     * @param serviceList
+     * @param isStartInbox
+     * @param subjectNames     监听的频道参数
+     */
+    public void initGroups(String groupName, String checkMessageName, List<String[]> serviceList, boolean isStartInbox, String... subjectNames) {
+        try {
+            rvlistenerInit(checkMessageName);
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        rvlistener.setMessageRead(getMessageRead());
+        Map<String, List<String[]>> stringListMap = new HashMap<>();
+        stringListMap.put(groupName, serviceList);
+        rvlistener.setTransportParameterGroup(stringListMap, checkMessageName, isStartInbox, subjectNames);
+        xmLreadService = new XMLreadService();
+    }
 
     /**
      * 数组合并
