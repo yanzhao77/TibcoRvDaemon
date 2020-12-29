@@ -6,7 +6,7 @@ import com.tibco.tibrv.*;
 
 import java.util.*;
 
-public class RvListener implements TibrvMsgCallback {
+public class RvListener {
 
     MessageReadCallback messageRead;//统一的消息处理
     /**
@@ -79,7 +79,7 @@ public class RvListener implements TibrvMsgCallback {
                     try {
                         response_subjectName = transportParameter.getQueryInbox();
                         new TibrvListener(tibrvQueue,//创建inbox监听
-                                this, transport, response_subjectName, null);
+                                messageRead, transport, response_subjectName, null);
                     } catch (TibrvException e) {
                         System.err.println("Failed to create listener:");
                         e.printStackTrace();
@@ -133,7 +133,7 @@ public class RvListener implements TibrvMsgCallback {
                         // create listener using default queue
                         try {
                             System.out.println("是否启动？：\t" + transport.isValid());
-                            new TibrvListener(tibrvQueue, this, transport,
+                            new TibrvListener(tibrvQueue, messageRead, transport,
                                     subjectName, null);
                             System.err.println("Listening on: " + subjectName);
                         } catch (TibrvException e) {
@@ -162,6 +162,13 @@ public class RvListener implements TibrvMsgCallback {
 
     }
 
+    /**
+     * 消息接收处理放在XmlReadFactory
+     *
+     * @param listener
+     * @param msg
+     */
+    @Deprecated
     public void onMsg(TibrvListener listener, TibrvMsg msg) {
 //        System.out.println((new Date()).toString() +
 //                ": subject=" + msg.getSendSubject() +
@@ -170,6 +177,7 @@ public class RvListener implements TibrvMsgCallback {
 //        );
         if (messageRead != null)
             messageRead.onMsg(listener, msg);
+        //清空缓冲区，并将信息立即送出
         System.out.flush();
     }
 

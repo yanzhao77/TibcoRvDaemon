@@ -6,6 +6,7 @@ import com.chot.utils.CustomThreadPoolExecutor;
 import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -20,15 +21,16 @@ import java.util.regex.Pattern;
 
 public class XmlReadFactory {
     MessageReadCallback messageRead;// 设置回调验证消息
-    //    String checkMessageName;// 要拦截的消息名称
     Class MessageClass; // xml文件映射类
     CustomThreadPoolExecutor customThreadPoolExecutor;//线程池
     XMLService xmlService;
     RvListener rvlistener;
     Map<String, String> subjectNameForCheckMessageNameMap;
+    Logger logger;
 
 
-    public XmlReadFactory() {
+    public XmlReadFactory(Logger logger) {
+        this.logger = logger;
         rvlistener = new RvListener();
         customThreadPoolExecutor = new CustomThreadPoolExecutor();
         customThreadPoolExecutor.init();
@@ -225,11 +227,11 @@ public class XmlReadFactory {
      *
      * @param groupName        主备机组名称
      * @param checkMessageName 监听的消息名称
-     * @param serviceList
+     * @param serviceArr
      * @param isStartInbox
      * @param subjectNames     监听的频道参数
      */
-    public void initGroups(String groupName, String checkMessageName, List<String[]> serviceList, boolean isStartInbox, String... subjectNames) {
+    public void initGroups(String groupName, String checkMessageName, String[][] serviceArr, boolean isStartInbox, String... subjectNames) {
         try {
             rvlistenerInit(checkMessageName, subjectNames);
         } catch (ClassNotFoundException e) {
@@ -238,6 +240,10 @@ public class XmlReadFactory {
         }
         rvlistener.setMessageRead(getMessageRead());
         Map<String, List<String[]>> stringListMap = new HashMap<>();
+        List<String[]> serviceList = new ArrayList<>();
+        for (String[] strings : serviceArr) {
+            serviceList.add(strings);
+        }
         stringListMap.put(groupName, serviceList);
         rvlistener.setTransportParameterGroup(stringListMap, checkMessageName, isStartInbox, subjectNames);
         xmlService = new XMLService();

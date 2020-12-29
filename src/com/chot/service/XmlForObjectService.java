@@ -27,13 +27,13 @@ public interface XmlForObjectService {
     /**
      * 主备机组监听
      *
-     * @param groupName
-     * @param checkMessageName
-     * @param serviceList
-     * @param isStartInbox
-     * @param subjectNames
+     * @param groupName        机组名称
+     * @param checkMessageName 监听的消息名称
+     * @param serviceArr       主机和备份机参数
+     * @param isStartInbox     是否开启inbox
+     * @param subjectNames     监听的频道参数
      */
-    void rvListenerGroupInit(String groupName, String checkMessageName, List<String[]> serviceList,
+    void rvListenerGroupInit(String groupName, String checkMessageName, String[][] serviceArr,
                              boolean isStartInbox, String... subjectNames);
 
     /**

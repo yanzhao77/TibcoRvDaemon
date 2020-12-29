@@ -33,10 +33,9 @@ public class RVDemoMain {
         String messageNameTEST = "CheckRecipeParameterRequest";
 
         //启动主备机制，如果启动时报错，就切换到备用机
-        ArrayList<String[]> serverList = new ArrayList<>();
-        serverList.add(new String[]{service, network + "22", daemon});
-        serverList.add(new String[]{serviceTEST, networkTEST, daemonTEST});
-        xmlReadStr.rvListenerGroupInit("PEMsvr", messageNameTEST, serverList, false,
+        String[][] serviceArr = new String[][]{new String[]{service, network + "22", daemon},
+                new String[]{serviceTEST, networkTEST, daemonTEST}};
+        xmlReadStr.rvListenerGroupInit("PEMsvr", messageNameTEST, serviceArr, false,
                 OCTESTsvr, ACFTESTsvr, TESTsvr);
 
         //测试其他服务器

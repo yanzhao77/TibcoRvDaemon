@@ -1,7 +1,14 @@
 package com.chot.service.serviceImpl;
 
 import com.chot.service.XmlForObjectService;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -16,11 +23,26 @@ import java.util.List;
  */
 public class XmlForObjectServiceImpl implements XmlForObjectService {
     private XmlReadFactory xmlReadForCheck;
+    Logger logger;
 
     public XmlForObjectServiceImpl() {
-        xmlReadForCheck = new XmlReadFactory();
+        xmlReadForCheck = new XmlReadFactory(logger);
+        loggerInit();
     }
 
+    public void loggerInit() {
+//        Path configrationPath = Paths.get("cfg", "log4j.properties");
+//        if (!Files.exists(configrationPath) || !Files.isRegularFile(configrationPath)) {
+//            return;
+//
+//        }
+//        System.setProperty("log4j.defaultInitOverride", "1");
+//        PropertyConfigurator.configure(configrationPath.toString());
+        String resource = System.getProperty("user.dir") + "/resources/" + "log4j.properties";
+        PropertyConfigurator.configure(resource);
+        logger = Logger.getLogger(XmlForObjectServiceImpl.class.getName());
+        logger.info(null);
+    }
 
     /**
      * 加载监听对象参数
@@ -40,15 +62,15 @@ public class XmlForObjectServiceImpl implements XmlForObjectService {
     /**
      * 主备机组监听
      *
-     * @param groupName
-     * @param checkMessageName
-     * @param serviceList
-     * @param isStartInbox
-     * @param subjectNames
+     * @param groupName        机组名称
+     * @param checkMessageName 监听的消息名称
+     * @param serviceArr       主机和备份机参数
+     * @param isStartInbox     是否开启inbox
+     * @param subjectNames     监听的频道参数
      */
-    public void rvListenerGroupInit(String groupName, String checkMessageName, List<String[]> serviceList,
+    public void rvListenerGroupInit(String groupName, String checkMessageName, String[][] serviceArr,
                                     boolean isStartInbox, String... subjectNames) {
-        xmlReadForCheck.initGroups(groupName, checkMessageName, serviceList, isStartInbox, subjectNames);
+        xmlReadForCheck.initGroups(groupName, checkMessageName, serviceArr, isStartInbox, subjectNames);
     }
 
     /**
