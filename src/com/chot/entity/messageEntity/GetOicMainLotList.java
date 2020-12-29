@@ -1,4 +1,4 @@
-package com.chot.messageEntity;
+package com.chot.entity.messageEntity;
 
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;

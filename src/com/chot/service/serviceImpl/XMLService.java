@@ -1,7 +1,5 @@
-package com.chot.messageCheck;
+package com.chot.service.serviceImpl;
 
-import com.chot.messageEntity.CheckRecipeParameterRequest;
-import com.chot.messageEntity.GetOicMainLotList;
 import com.chot.utils.XStreamUtil;
 import com.tibco.tibrv.TibrvMsg;
 
@@ -12,10 +10,10 @@ import com.tibco.tibrv.TibrvMsg;
  * @Date 2020/12/18 11:03
  * @Created by yan34177
  */
-public class XMLreadService {
+public class XMLService {
     private XStreamUtil xStreamUtil;
 
-    public XMLreadService() {
+    public XMLService() {
         xStreamUtil = new XStreamUtil();
     }
 

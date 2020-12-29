@@ -1,7 +1,5 @@
 package com.chot.utils;
 
-import com.chot.messageCheck.XmlReadFactory;
-
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 

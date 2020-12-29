@@ -1,4 +1,4 @@
-package com.chot.daesonEntity;
+package com.chot.entity.daesonEntity;
 
 import com.tibco.tibrv.TibrvException;
 import com.tibco.tibrv.TibrvRvdTransport;

@@ -1,12 +1,12 @@
 package com.chot.rvLister;
 
 import com.chot.messageCheck.MessageReadCallback;
-import com.chot.daesonEntity.TibrvRvdTransportParameter;
+import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 import com.tibco.tibrv.*;
 
 import java.util.*;
 
-public class Rvlistener implements TibrvMsgCallback {
+public class RvListener implements TibrvMsgCallback {
 
     MessageReadCallback messageRead;//统一的消息处理
     /**
@@ -14,7 +14,7 @@ public class Rvlistener implements TibrvMsgCallback {
      */
     Map<String, List<TibrvRvdTransportParameter>> transportGroup;//多个server
 
-    public Rvlistener() {
+    public RvListener() {
         // open Tibrv in native implementation
         try {
             Tibrv.open(Tibrv.IMPL_NATIVE);

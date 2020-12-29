@@ -2,7 +2,7 @@ package com.chot.test.demo;
 
 
 import com.chot.messageCheck.MessageReadCallback;
-import com.chot.daesonEntity.TibrvRvdTransportParameter;
+import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 import com.tibco.tibrv.*;
 
 import java.util.*;

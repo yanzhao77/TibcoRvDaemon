@@ -1,11 +1,9 @@
-package com.chot.messageCheck;
+package com.chot.service.serviceImpl;
 
-import com.chot.rvLister.Rvlistener;
-import com.chot.utils.CustomThreadPoolExecutor;
-import com.chot.utils.XStreamUtil;
+import com.chot.service.XmlForObjectService;
 
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
+
 
 /**
  * 启动接口
@@ -16,10 +14,10 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Date 2020/12/9 19:17
  * @Created by yan34177
  */
-public class XmlForObjectService {
+public class XmlForObjectServiceImpl implements XmlForObjectService {
     private XmlReadFactory xmlReadForCheck;
 
-    public XmlForObjectService() {
+    public XmlForObjectServiceImpl() {
         xmlReadForCheck = new XmlReadFactory();
     }
 

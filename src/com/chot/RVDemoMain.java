@@ -1,7 +1,8 @@
 package com.chot;
 
 
-import com.chot.messageCheck.XmlForObjectService;
+import com.chot.service.XmlForObjectService;
+import com.chot.service.serviceImpl.XmlForObjectServiceImpl;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class RVDemoMain {
 
     public static void main(String[] args) throws ClassNotFoundException {
-        XmlForObjectService xmlReadStr = new XmlForObjectService();
+        XmlForObjectService xmlReadStr = new XmlForObjectServiceImpl();
 
         // prod监听
         String service = "8400";

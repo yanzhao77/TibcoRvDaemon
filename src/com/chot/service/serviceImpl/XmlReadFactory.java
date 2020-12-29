@@ -1,7 +1,7 @@
-package com.chot.messageCheck;
+package com.chot.service.serviceImpl;
 
-import com.chot.rvLister.Rvlistener;
-
+import com.chot.messageCheck.MessageReadCallback;
+import com.chot.rvLister.RvListener;
 import com.chot.utils.CustomThreadPoolExecutor;
 import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
@@ -23,13 +23,13 @@ public class XmlReadFactory {
     //    String checkMessageName;// 要拦截的消息名称
     Class MessageClass; // xml文件映射类
     CustomThreadPoolExecutor customThreadPoolExecutor;//线程池
-    XMLreadService xmLreadService;
-    Rvlistener rvlistener;
+    XMLService xmlService;
+    RvListener rvlistener;
     Map<String, String> subjectNameForCheckMessageNameMap;
 
 
     public XmlReadFactory() {
-        rvlistener = new Rvlistener();
+        rvlistener = new RvListener();
         customThreadPoolExecutor = new CustomThreadPoolExecutor();
         customThreadPoolExecutor.init();
         messageRead = new MessageReadCallback() {
@@ -47,7 +47,7 @@ public class XmlReadFactory {
                         }
                         String readMessageCheck = DocumentReadMessageCheck(message, tibrvMsg, checkMessageName);// 取出xml正文
                         if (readMessageCheck != null) {
-                            xmLreadService.toJavaBan(readMessageCheck, MessageClass, tibrvMsg);
+                            xmlService.toJavaBan(readMessageCheck, MessageClass, tibrvMsg);
                         }
                         // 如果xStream无法识别，就使用map解析
                         // Map<String, Object> objectMap =
@@ -184,14 +184,14 @@ public class XmlReadFactory {
             setCheckMessageName(subjectName, checkMessageName);
         }
         this.MessageClass = Class
-                .forName("com.chot.messageEntity." + checkMessageName);
+                .forName("com.chot.entity.messageEntity." + checkMessageName);
     }
 
     /**
      * 启动监听
      */
     public void start() {
-        xmLreadService = new XMLreadService();
+        xmlService = new XMLService();
         rvlistener.start();
     }
 
@@ -240,7 +240,7 @@ public class XmlReadFactory {
         Map<String, List<String[]>> stringListMap = new HashMap<>();
         stringListMap.put(groupName, serviceList);
         rvlistener.setTransportParameterGroup(stringListMap, checkMessageName, isStartInbox, subjectNames);
-        xmLreadService = new XMLreadService();
+        xmlService = new XMLService();
     }
 
     /**

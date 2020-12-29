@@ -1,7 +1,7 @@
 //package com.chot.test.rvfault;
 //
 //import com.chot.messageCheck.MessageReadCallback;
-//import com.chot.daesonEntity.TibrvRvdTransportParameter;
+//import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 //import com.tibco.tibrv.*;
 //
 //public class NumberReceiver3 implements TibrvMsgCallback, TibrvFtMemberCallback {
