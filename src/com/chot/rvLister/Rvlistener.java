@@ -35,6 +35,7 @@ public class Rvlistener implements TibrvMsgCallback {
         boolean isStartTransport = false;//判断是否启动成功
 
         for (String key : transportGroup.keySet()) {
+            isStartTransport = false;
             List<TibrvRvdTransportParameter> transportParameterList = new ArrayList<>();
             transportParameterList.addAll(transportGroup.get(key));
             //如果key是默认机组，那么启动所有的Transport，如果不是，就只启动一个
@@ -167,13 +168,8 @@ public class Rvlistener implements TibrvMsgCallback {
 //                ", reply=" + msg.getReplySubject() +
 //                ", message=" + msg.toString()
 //        );
-//        List<String> messagename = match(msg.toString(), "MESSAGENAME");
         if (messageRead != null)
             messageRead.onMsg(listener, msg);
-//        if (msg.toString().equals("GetOicMainLotList")) {
-//        System.out.println((new Date()).toString() +
-//                ": subject=" + msg.getSendSubject() + ", reply=" + msg.getReplySubject());
-//        }
         System.out.flush();
     }
 
@@ -242,45 +238,4 @@ public class Rvlistener implements TibrvMsgCallback {
         }
         return transportGroup;
     }
-
-    public static void main(String[] args) {
-        // 监听
-//        String service = "8210";
-//        String network = ";225.9.9.2";
-//        String daemon = "127.0.0.1:7500";
-//        String subject = "CHOT.G86.MES.TEST.PEMsvr2";
-        Rvlistener rl = new Rvlistener();
-
-        // 监听多个subject
-        String service = "8400";
-        String network = ";225.16.16.4";
-        String daemon = "tcp:10.50.10.66:7500";
-        String subjectACFCNMsvr = "CHOT.G86.ACFMES.PROD.CNMsvr";
-        String subjectOCCNMsvr = "CHOT.G86.OCMES.PROD.CNMsvr";
-        String subjectCommonCNMsvr = "CHOT.G86.MES.PROD.CNMsvr";
-//        String service = "8210";
-//        String network = ";225.9.9.2";
-//        String daemon = "127.0.0.1:7500";
-//        String subject = "CHOT.G86.MES.TEST.PEMsvr";
-
-        String messageName = "GetOicMainLotList";// 要拦截的message的名称
-        rl.setTransportParameter(null, messageName, service, network, daemon, false,
-                subjectACFCNMsvr, subjectOCCNMsvr, subjectCommonCNMsvr);
-
-        //再启动一个线程监听
-        String serviceTEST = "8200";
-        String networkTEST = ";225.16.16.222";
-        String daemonTEST = "10.50.10.72:7500";
-        String subjectACFTESTsvr = "CHOT.G86.ACFMES.PROD.PEMsvr";
-        String subjectOCTESTsvr = "CHOT.G86.OCMES.PROD.PEMsvr";
-        String subjectCommonTESTsvr = "CHOT.G86.MES.PROD.PEMsvr";
-
-        String messageNameTEST = "CheckecipeParameterRequest";
-        rl.setTransportParameter(null, messageNameTEST, serviceTEST, networkTEST, daemonTEST, false,
-                subjectACFTESTsvr, subjectOCTESTsvr, subjectCommonTESTsvr);
-        rl.start();
-//        rl.setStartInbox(true);
-
-    }
-
 }

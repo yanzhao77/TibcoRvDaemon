@@ -14,7 +14,7 @@ public class TibrvRvdTransportParameter {
     private double hbInterval = 1.5;//心跳时间间隔
     private double prepareInterval = 3;//准备时间间隔
     private double activateInterval = 4.8;//激活间隔
-    boolean startInbox = false; //开启inbox
+    boolean startInbox = false; //是否开启开启inbox
 
     String service;
     String network;

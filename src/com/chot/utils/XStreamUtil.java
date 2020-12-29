@@ -2,6 +2,9 @@ package com.chot.utils;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Dom4JDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3DomDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3Driver;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -17,7 +20,27 @@ public class XStreamUtil {
     XStream xStream;
 
     public XStreamUtil() {
-        xStream = new XStream(new Dom4JDriver());
+        //重写 wrapMapper 抑制XStream: UnknownFieldException - No such field问题
+        //Dom4JDriver速度太慢，导致任务执行溢出队列，更换xpp3驱动
+        xStream = new XStream(new Xpp3DomDriver()) {
+            @Override
+            protected MapperWrapper wrapMapper(MapperWrapper next) {
+                return new MapperWrapper(next) {
+                    @Override
+                    public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+                        if (definedIn == Object.class) {
+                            try {
+                                return this.realClass(fieldName) != null;
+                            } catch (Exception e) {
+                                return false;
+                            }
+                        } else {
+                            return super.shouldSerializeMember(definedIn, fieldName);
+                        }
+                    }
+                };
+            }
+        };
 
     }
 

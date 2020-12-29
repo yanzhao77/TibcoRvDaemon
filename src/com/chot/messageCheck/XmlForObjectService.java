@@ -17,19 +17,21 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Created by yan34177
  */
 public class XmlForObjectService {
-    XmlReadFactory xmlReadForCheck;
+    private XmlReadFactory xmlReadForCheck;
 
     public XmlForObjectService() {
         xmlReadForCheck = new XmlReadFactory();
     }
 
+
     /**
-     * 启动一条线程，并启动监听
+     * 加载监听对象参数
      *
      * @param checkMessageName 监听的消息名称
      * @param service
      * @param network
      * @param daemon
+     * @param isStartInbox     是否开启inbox
      * @param subjectNames     监听的频道参数
      */
     public void rvListenerInit(String checkMessageName, String service, String network,

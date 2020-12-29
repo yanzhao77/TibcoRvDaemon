@@ -66,10 +66,6 @@ public class CustomUnblockThreadPoolExecutor {
             Thread t = new Thread(r);
             String threadName = CustomThreadPoolExecutor.class.getSimpleName() + count.addAndGet(1);
             t.setName(threadName);
-            if (r instanceof XmlReadFactory) {
-                XmlReadFactory xmlReadForCheck = (XmlReadFactory) r;
-                t.setName(xmlReadForCheck.getCheckMessageName());
-            }
             System.out.println(threadName);
             return t;
         }

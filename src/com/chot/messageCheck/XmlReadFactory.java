@@ -20,11 +20,12 @@ import java.util.regex.Pattern;
 
 public class XmlReadFactory {
     MessageReadCallback messageRead;// 设置回调验证消息
-    String checkMessageName;// 要拦截的消息名称
+    //    String checkMessageName;// 要拦截的消息名称
     Class MessageClass; // xml文件映射类
     CustomThreadPoolExecutor customThreadPoolExecutor;//线程池
     XMLreadService xmLreadService;
     Rvlistener rvlistener;
+    Map<String, String> subjectNameForCheckMessageNameMap;
 
 
     public XmlReadFactory() {
@@ -39,6 +40,7 @@ public class XmlReadFactory {
                     @Override
                     public void run() {
                         String message = checkMessage(tibrvMsg.toString());// message全文
+                        String checkMessageName = getCheckMessageName(tibrvListener.getSubject());
                         if (checkMessageName == null) {
                             System.out.println(message);
                             return;
@@ -175,10 +177,12 @@ public class XmlReadFactory {
      * @param checkMessageName
      * @throws ClassNotFoundException
      */
-    public <T> void rvlistenerInit(String checkMessageName)
+    public <T> void rvlistenerInit(String checkMessageName, String... subjectNameArr)
             throws ClassNotFoundException {
         if (checkMessageName == null) return;
-        setCheckMessageName(checkMessageName);
+        for (String subjectName : subjectNameArr) {
+            setCheckMessageName(subjectName, checkMessageName);
+        }
         this.MessageClass = Class
                 .forName("com.chot.messageEntity." + checkMessageName);
     }
@@ -203,7 +207,7 @@ public class XmlReadFactory {
      */
     public void init(String checkMessageName, String service, String network, String daemon, boolean isStartInbox, String... subjectNames) {
         try {
-            rvlistenerInit(checkMessageName);
+            rvlistenerInit(checkMessageName, subjectNames);
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -227,7 +231,7 @@ public class XmlReadFactory {
      */
     public void initGroups(String groupName, String checkMessageName, List<String[]> serviceList, boolean isStartInbox, String... subjectNames) {
         try {
-            rvlistenerInit(checkMessageName);
+            rvlistenerInit(checkMessageName, subjectNames);
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -265,12 +269,23 @@ public class XmlReadFactory {
         this.messageRead = messageRead;
     }
 
-    public String getCheckMessageName() {
-        return checkMessageName;
+    public Map<String, String> getSubjectNameForCheckMessageNameMap() {
+        if (subjectNameForCheckMessageNameMap == null) {
+            subjectNameForCheckMessageNameMap = new HashMap<>();
+        }
+        return subjectNameForCheckMessageNameMap;
     }
 
-    public void setCheckMessageName(String checkMessageName) {
-        this.checkMessageName = checkMessageName;
+    public void setSubjectNameForCheckMessageNameMap(Map<String, String> messageNameMap) {
+        this.subjectNameForCheckMessageNameMap = messageNameMap;
+    }
+
+    public String getCheckMessageName(String subjectName) {
+        return subjectNameForCheckMessageNameMap.get(subjectName);
+    }
+
+    public void setCheckMessageName(String subjectName, String checkMessageName) {
+        getSubjectNameForCheckMessageNameMap().put(subjectName, checkMessageName);
     }
 
 }

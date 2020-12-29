@@ -13,15 +13,21 @@ import com.tibco.tibrv.TibrvMsg;
  * @Created by yan34177
  */
 public class XMLreadService {
-    XStreamUtil xStreamUtil;
+    private XStreamUtil xStreamUtil;
 
     public XMLreadService() {
         xStreamUtil = new XStreamUtil();
     }
 
     public void toJavaBan(String readMessageCheck, Class cls, TibrvMsg msg) {
-        Object messageValue;// 抓取的消息obj
-        messageValue = xStreamUtil.toBean(readMessageCheck, cls);
+        Object messageValue = null;// 抓取的消息obj
+        try {
+            messageValue = xStreamUtil.toBean(readMessageCheck, cls);
+        } catch (Exception e) {
+            System.err.println("无法识别的message,message有其他字段！");
+            System.out.println(readMessageCheck);
+            e.printStackTrace();
+        }
         if (messageValue != null) {
             println(messageValue, msg);// 打印
         }

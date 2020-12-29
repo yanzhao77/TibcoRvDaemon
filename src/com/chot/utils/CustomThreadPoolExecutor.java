@@ -20,13 +20,13 @@ public class CustomThreadPoolExecutor {
      * workQueue 阻塞队列----new ArrayBlockingQueue<Runnable>(10)====10容量的阻塞队列
      * threadFactory 新建线程工厂----new CustomThreadFactory()====定制的线程工厂
      * rejectedExecutionHandler 当提交任务数超过maxmumPoolSize+workQueue之和时,
-     * 即当提交第41个任务时(前面线程都没有执行完,此测试方法中用sleep(100)),
+     * 当提交第十万个任务时(前面线程都没有执行完,此测试方法中用sleep(100)),
      * 任务会交给RejectedExecutionHandler来处理
      */
 
     public void init() {
         pool = new ThreadPoolExecutor(3, 5, 30,
-                TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(1000000), new CustomThreadFactory(), new CustomRejectedExecutionHandler());
+                TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(100000), new CustomThreadFactory(), new CustomRejectedExecutionHandler());
 
         Thread daemonThread = new Thread(new Runnable() {
             @Override
@@ -37,24 +37,31 @@ public class CustomThreadPoolExecutor {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Runtime run = Runtime.getRuntime();
-                    long max = run.maxMemory();//最大内存
-                    long free = run.freeMemory();//已分配内存中的剩余空间
-                    total = run.totalMemory();//已用内存
-
-//                    System.out.println("可用内存 = " + XStreamUtil.getNetFileSizeDescription(max - total + free));
-//                    System.out.println("项目已用内存 = " + XStreamUtil.getNetFileSizeDescription(total));
-//
-//                    System.out.println("最大线程数：" + pool.getMaximumPoolSize());
-//                    System.out.println("核心线程数：" + pool.getCorePoolSize());
-//                    System.out.println("当前执行线程数：" + pool.getActiveCount());
-//                    System.out.println("剩余线程数：" + (pool.getMaximumPoolSize() - pool.getActiveCount()));
-//                    System.out.println();
+                    printlnThreadValue();
                 }
             }
         });
         daemonThread.setDaemon(true);
         daemonThread.start();
+    }
+
+    /**
+     * 输出打印线程信息 和AP信息
+     */
+    public void printlnThreadValue() {
+        Runtime run = Runtime.getRuntime();
+        long max = run.maxMemory();//最大内存
+        long free = run.freeMemory();//已分配内存中的剩余空间
+        total = run.totalMemory();//已用内存
+
+        System.out.println("可用内存 = " + XStreamUtil.getNetFileSizeDescription(max - total + free));
+        System.out.println("项目已用内存 = " + XStreamUtil.getNetFileSizeDescription(total));
+
+        System.out.println("最大线程数：" + pool.getMaximumPoolSize());
+        System.out.println("核心线程数：" + pool.getCorePoolSize());
+        System.out.println("当前执行线程数：" + pool.getActiveCount());
+        System.out.println("剩余线程数：" + (pool.getMaximumPoolSize() - pool.getActiveCount()));
+        System.out.println();
     }
 
     /**
