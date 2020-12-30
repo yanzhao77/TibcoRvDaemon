@@ -34,6 +34,14 @@ public class RvListener {
      */
     public void start() {
         TibrvQueue tibrvQueue = Tibrv.defaultQueue();
+        if (messageRead == null) {
+            messageRead = new MessageReadCallback() {
+                @Override
+                public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
+                    onMsgCallBack(tibrvListener, tibrvMsg);
+                }
+            };
+        }
 
         boolean isStartTransport = false;//判断是否启动成功
 
@@ -176,14 +184,12 @@ public class RvListener {
      * @param msg
      */
     @Deprecated
-    public void onMsg(TibrvListener listener, TibrvMsg msg) {
-//        System.out.println((new Date()).toString() +
-//                ": subject=" + msg.getSendSubject() +
-//                ", reply=" + msg.getReplySubject() +
-//                ", message=" + msg.toString()
-//        );
-        if (messageRead != null)
-            messageRead.onMsg(listener, msg);
+    public void onMsgCallBack(TibrvListener listener, TibrvMsg msg) {
+        System.out.println((new Date()).toString() +
+                ": subject=" + msg.getSendSubject() +
+                ", reply=" + msg.getReplySubject() +
+                ", message=" + msg.toString()
+        );
         //清空缓冲区，并将信息立即送出
         System.out.flush();
     }

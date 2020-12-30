@@ -21,7 +21,7 @@ public class XStreamUtil {
     XStream xStream;
     static Logger logger;
 
-    public XStreamUtil() {
+    public XStreamUtil() throws Exception {
         //重写 wrapMapper 抑制XStream: UnknownFieldException - No such field问题
         //Dom4JDriver速度太慢，导致任务执行溢出队列，更换xpp3驱动
         xStream = new XStream(new Xpp3DomDriver()) {
@@ -31,11 +31,7 @@ public class XStreamUtil {
                     @Override
                     public boolean shouldSerializeMember(Class definedIn, String fieldName) {
                         if (definedIn == Object.class) {
-                            try {
-                                return this.realClass(fieldName) != null;
-                            } catch (Exception e) {
-                                return false;
-                            }
+                            return this.realClass(fieldName) != null;
                         } else {
                             return super.shouldSerializeMember(definedIn, fieldName);
                         }
@@ -59,7 +55,6 @@ public class XStreamUtil {
         xStream.setClassLoader(cls.getClassLoader());
         xStream.processAnnotations(cls);
         T obj = (T) xStream.fromXML(xmlStr);
-        logger.debug(obj.toString());
         return obj;
     }
 
@@ -88,7 +83,7 @@ public class XStreamUtil {
             logger.debug(object.toString());
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
-            logger.error(e.getCause());
+            logger.error(e.getLocalizedMessage(), e.getCause());
         }
     }
 
@@ -111,7 +106,7 @@ public class XStreamUtil {
                 br.close();
             }
         } catch (Exception e) {
-            logger.error(e.getCause());
+            logger.error(e.getLocalizedMessage(), e.getCause());
         }
         return result.toString().trim();
     }
@@ -141,14 +136,14 @@ public class XStreamUtil {
             filewriter.write(xmlvalue);// 写出文件
 
         } catch (Exception e) {
-            logger.error(e.getCause());
+            logger.error(e.getLocalizedMessage(), e.getCause());
         } finally {
             if (filewriter != null) {
                 try {
                     filewriter.close();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    logger.error(e.getCause());
+                    logger.error(e.getLocalizedMessage(), e.getCause());
                 }
             }
             return false;
