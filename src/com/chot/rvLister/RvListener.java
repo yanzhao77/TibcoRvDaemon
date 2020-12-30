@@ -185,11 +185,11 @@ public class RvListener {
      */
     @Deprecated
     public void onMsgCallBack(TibrvListener listener, TibrvMsg msg) {
-        System.out.println((new Date()).toString() +
-                ": subject=" + msg.getSendSubject() +
-                ", reply=" + msg.getReplySubject() +
-                ", message=" + msg.toString()
-        );
+//        System.out.println((new Date()).toString() +
+//                ": subject=" + msg.getSendSubject() +
+//                ", reply=" + msg.getReplySubject() +
+//                ", message=" + msg.toString()
+//        );
         //清空缓冲区，并将信息立即送出
         System.out.flush();
     }

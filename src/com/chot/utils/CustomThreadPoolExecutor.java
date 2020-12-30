@@ -40,7 +40,7 @@ public class CustomThreadPoolExecutor {
                         Thread.sleep(1000);
                         printlnThreadValue();
                     } catch (InterruptedException e) {
-                        logger.error(e.getLocalizedMessage(),e.getCause());
+                        logger.error(e.getLocalizedMessage(), e.getCause());
                     }
 
                 }
@@ -59,13 +59,14 @@ public class CustomThreadPoolExecutor {
         long free = run.freeMemory();//已分配内存中的剩余空间
         total = run.totalMemory();//已用内存
 
-        logger.debug("可用内存 = " + XStreamUtil.getNetFileSizeDescription(max - total + free));
-        logger.debug("项目已用内存 = " + XStreamUtil.getNetFileSizeDescription(total));
+        System.out.println("可用内存 = " + XStreamUtil.getNetFileSizeDescription(max - total + free));
+        System.out.println("项目已用内存 = " + XStreamUtil.getNetFileSizeDescription(total));
 
-        logger.debug("最大线程数：" + pool.getMaximumPoolSize());
-        logger.debug("核心线程数：" + pool.getCorePoolSize());
-        logger.debug("当前执行线程数：" + pool.getActiveCount());
-        logger.debug("剩余线程数：" + (pool.getMaximumPoolSize() - pool.getActiveCount()));
+        System.out.println("最大线程数：" + pool.getMaximumPoolSize());
+        System.out.println("核心线程数：" + pool.getCorePoolSize());
+        System.out.println("当前执行线程数：" + pool.getActiveCount());
+        System.out.println("剩余线程数：" + (pool.getMaximumPoolSize() - pool.getActiveCount()));
+//        System.err.println("当前worker数：" + pool.getQueue().size());
     }
 
     /**

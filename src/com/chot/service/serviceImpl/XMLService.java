@@ -4,6 +4,7 @@ import com.chot.entity.messageEntity.CheckRecipeParameterRequest;
 import com.chot.entity.messageEntity.GetOicMainLotList;
 import com.chot.utils.LoggerUtil;
 import com.chot.utils.XStreamUtil;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
 import org.apache.log4j.Logger;
@@ -51,21 +52,21 @@ public class XMLService {
     public void println(Object messageValue, TibrvMsg message) {
         Thread thread = Thread.currentThread();
         logger.info("线程ID：" + thread.getId() + "\t线程名称：" + thread.getName());
-        logger.info(message.getSendSubject());
+        System.err.println(message.getSendSubject() + "\t" + messageValue.getClass().getSimpleName());
         if (messageValue instanceof GetOicMainLotList) {
             GetOicMainLotList messageEntity = (GetOicMainLotList) messageValue;
 
-            System.out.println(messageEntity.getBody().getFactoryName());
-            System.out.println(messageEntity.getBody().getMachineName());
-            System.out.println(messageEntity.getBody().getEventUser());
-            System.out.println(messageEntity.getBody().getSoftwareVersion());
-            System.out.println(messageEntity.getBody()
+            System.err.println(messageEntity.getBody().getFactoryName());
+            System.err.println(messageEntity.getBody().getMachineName());
+            System.err.println(messageEntity.getBody().getEventUser());
+            System.err.println(messageEntity.getBody().getSoftwareVersion());
+            System.err.println(messageEntity.getBody()
                     .getTransactionStartTime());
-            System.out.println();
+            System.err.println();
         } else if (messageValue instanceof CheckRecipeParameterRequest) {
             CheckRecipeParameterRequest checkMessage = (CheckRecipeParameterRequest) messageValue;
-            System.out.println(checkMessage.getHeader().getMessageName());
-            System.out.println(checkMessage.getBody().getLineName());
+            System.err.println(checkMessage.getHeader().getMessageName());
+            System.err.println(checkMessage.getBody().getLineName());
         }
     }
 
@@ -73,7 +74,7 @@ public class XMLService {
         String message = checkMessage(checkMessage);// message全文
         String checkMessageName = getCheckMessageName(tibrvListener.getSubject());
         if (checkMessageName == null) {
-            logger.debug(message);
+//            logger.debug(message);
             return;
         }
         String readMessageCheck = documentReadMessageCheck(message, tibrvMsg, checkMessageName);// 取出xml正文
@@ -209,10 +210,9 @@ public class XMLService {
         try {
             Class cls = getClassForCheckMessageName(checkMessageName);
             messageValue = xStreamUtil.toBean(readMessage, cls);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            logger.error("无法识别的message,message有其他字段！" + e.getLocalizedMessage());
-            logger.error(readMessage);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+//            logger.error(readMessage);
         }
         if (messageValue != null) {
             println(messageValue, msg);// 打印
@@ -258,7 +258,7 @@ public class XMLService {
     }
 
     public String getCheckMessageName(String subjectName) {
-        return subjectNameForCheckMessageNameMap.get(subjectName);
+        return getSubjectNameForCheckMessageNameMap().get(subjectName);
     }
 
     public void setCheckMessageName(String subjectName, String checkMessageName) {

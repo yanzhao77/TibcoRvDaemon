@@ -21,6 +21,7 @@ public class XmlReadFactory {
     public XmlReadFactory(Logger logger) {
         this.logger = logger;
         rvlistener = new RvListener();
+        xmlService = new XMLService();
         customThreadPoolExecutor = new CustomThreadPoolExecutor();
         customThreadPoolExecutor.init();
         messageRead = new MessageReadCallback() {
@@ -46,7 +47,6 @@ public class XmlReadFactory {
      * 启动监听
      */
     public void start() {
-        xmlService = new XMLService();
         rvlistener.start();
         logger.debug("start rvlistener");
     }
@@ -88,7 +88,6 @@ public class XmlReadFactory {
         }
         stringListMap.put(groupName, serviceList);
         rvlistener.setTransportParameterGroup(stringListMap, checkMessageName, isStartInbox, subjectNames);
-        xmlService = new XMLService();
     }
 
 
