@@ -1,6 +1,7 @@
 package com.chot.service.serviceImpl;
 
 import com.chot.service.XmlForObjectService;
+import com.chot.utils.LoggerUtil;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -26,23 +27,11 @@ public class XmlForObjectServiceImpl implements XmlForObjectService {
     Logger logger;
 
     public XmlForObjectServiceImpl() {
+        logger = LoggerUtil.getLogger();
         xmlReadForCheck = new XmlReadFactory(logger);
-        loggerInit();
+
     }
 
-    public void loggerInit() {
-//        Path configrationPath = Paths.get("cfg", "log4j.properties");
-//        if (!Files.exists(configrationPath) || !Files.isRegularFile(configrationPath)) {
-//            return;
-//
-//        }
-//        System.setProperty("log4j.defaultInitOverride", "1");
-//        PropertyConfigurator.configure(configrationPath.toString());
-        String resource = System.getProperty("user.dir") + "/resources/" + "log4j.properties";
-        PropertyConfigurator.configure(resource);
-        logger = Logger.getLogger(XmlForObjectServiceImpl.class.getName());
-        logger.info(null);
-    }
 
     /**
      * 加载监听对象参数

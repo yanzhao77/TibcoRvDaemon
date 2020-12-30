@@ -1,5 +1,7 @@
 package com.chot.utils;
 
+import org.apache.log4j.Logger;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,6 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CustomUnblockThreadPoolExecutor {
     private ThreadPoolExecutor pool = null;
+    Logger logger;
+
+    public CustomUnblockThreadPoolExecutor() {
+        logger = LoggerUtil.getLogger();
+    }
 
     /**
      * 线程池初始化方法
@@ -30,6 +37,7 @@ public class CustomUnblockThreadPoolExecutor {
 
         pool = new ThreadPoolExecutor(1, 3, 30,
                 TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(5), new CustomThreadFactory(), new CustomRejectedExecutionHandler());
+        logger.debug("start  ThreadPoolExecutor");
     }
 
     public void destory() {
@@ -51,6 +59,7 @@ public class CustomUnblockThreadPoolExecutor {
                 executor.getQueue().put(r);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                logger.error(e.getLocalizedMessage(), e.getCause());
             }
         }
     }
@@ -64,7 +73,6 @@ public class CustomUnblockThreadPoolExecutor {
             Thread t = new Thread(r);
             String threadName = CustomThreadPoolExecutor.class.getSimpleName() + count.addAndGet(1);
             t.setName(threadName);
-            System.out.println(threadName);
             return t;
         }
     }

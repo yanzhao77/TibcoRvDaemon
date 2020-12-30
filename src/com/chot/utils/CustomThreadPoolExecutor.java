@@ -1,5 +1,7 @@
 package com.chot.utils;
 
+import org.apache.log4j.Logger;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CustomThreadPoolExecutor {
     private ThreadPoolExecutor pool = null;
     long total;//已用内存
+    Logger logger;
 
     /**
      * 线程池初始化方法
@@ -27,17 +30,19 @@ public class CustomThreadPoolExecutor {
     public void init() {
         pool = new ThreadPoolExecutor(3, 5, 30,
                 TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(10000), new CustomThreadFactory(), new CustomRejectedExecutionHandler());
-
+        logger = LoggerUtil.getLogger();
+        logger.debug("start  ThreadPoolExecutor");
         Thread daemonThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
                         Thread.sleep(1000);
+                        printlnThreadValue();
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        logger.error(e.getLocalizedMessage(),e.getCause());
                     }
-                    printlnThreadValue();
+
                 }
             }
         });
@@ -54,14 +59,13 @@ public class CustomThreadPoolExecutor {
         long free = run.freeMemory();//已分配内存中的剩余空间
         total = run.totalMemory();//已用内存
 
-        System.out.println("可用内存 = " + XStreamUtil.getNetFileSizeDescription(max - total + free));
-        System.out.println("项目已用内存 = " + XStreamUtil.getNetFileSizeDescription(total));
+        logger.debug("可用内存 = " + XStreamUtil.getNetFileSizeDescription(max - total + free));
+        logger.debug("项目已用内存 = " + XStreamUtil.getNetFileSizeDescription(total));
 
-        System.out.println("最大线程数：" + pool.getMaximumPoolSize());
-        System.out.println("核心线程数：" + pool.getCorePoolSize());
-        System.out.println("当前执行线程数：" + pool.getActiveCount());
-        System.out.println("剩余线程数：" + (pool.getMaximumPoolSize() - pool.getActiveCount()));
-        System.out.println();
+        logger.debug("最大线程数：" + pool.getMaximumPoolSize());
+        logger.debug("核心线程数：" + pool.getCorePoolSize());
+        logger.debug("当前执行线程数：" + pool.getActiveCount());
+        logger.debug("剩余线程数：" + (pool.getMaximumPoolSize() - pool.getActiveCount()));
     }
 
     /**
@@ -87,7 +91,7 @@ public class CustomThreadPoolExecutor {
         if (total < 314572800) {//当内存超过300M时，不得再起新的线程
             pool.execute(runnable);
         } else {
-            System.out.println("内存已超出300M！禁止再添加任务");
+            logger.debug("内存已超出300M！禁止再添加任务");
         }
     }
 
@@ -96,7 +100,7 @@ public class CustomThreadPoolExecutor {
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             //记录异常
-            System.out.println("error...................");
+            logger.error(r.toString());
         }
     }
 

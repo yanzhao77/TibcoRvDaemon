@@ -49,7 +49,7 @@ public class TibrvRvdTransportParameter {
      * @param groupName
      * @param description
      */
-    public void setFaultToleranceParameter(String groupName, String description) throws TibrvException {
+    public void setFaultToleranceParameter(String groupName, String description) {
         this.groupName = groupName;
         this.setDescription(description);//添加说明
     }

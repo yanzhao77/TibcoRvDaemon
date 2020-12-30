@@ -2,25 +2,28 @@ package com.chot.rvLister;
 
 import com.chot.messageCheck.MessageReadCallback;
 import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
+import com.chot.utils.LoggerUtil;
 import com.tibco.tibrv.*;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
 public class RvListener {
 
     MessageReadCallback messageRead;//统一的消息处理
+    Logger logger;
     /**
      * 这里是两层结构，Map的key是它的group名字，如果有备份的机组，就使用单个
      */
     Map<String, List<TibrvRvdTransportParameter>> transportGroup;//多个server
 
     public RvListener() {
+        logger = LoggerUtil.getLogger();
         // open Tibrv in native implementation
         try {
             Tibrv.open(Tibrv.IMPL_NATIVE);
         } catch (TibrvException e) {
-            System.err.println("Failed to open Tibrv in native implementation:");
-            e.printStackTrace();
+            logger.error("Failed to open Tibrv in native implementation:" + e.getLocalizedMessage(), e.getCause());
             System.exit(0);
         }
     }
@@ -49,12 +52,15 @@ public class RvListener {
                 try {
                     transport = transportParameter.getTibrvRvdTransport();
                     isStartTransport = true;
+                    logger.debug("service\t" + transportParameter.getService() + "\tnetwork\t"
+                            + transportParameter.getNetwork()
+                            + "\tdaemon\t" + transportParameter.getDaemon() + "\t启动成功");
                 } catch (TibrvException e) {
-                    System.err.println("Failed to create TibrvRvdTransport:\n" +
+                    logger.error("Failed to create TibrvRvdTransport:\n" +
                             "service:" + transportParameter.getService() +
                             "\tNetwork:" + transportParameter.getNetwork() +
                             "\tDaemon:" + transportParameter.getDaemon() +
-                            "\t" + "is not connect");
+                            "\t" + "is not connect" + e.getLocalizedMessage(), e.getCause());
                     //如果这个备份机不可用，就启动其他的，
                     isStartTransport = false;
                     continue;//启用备用机组
@@ -65,8 +71,7 @@ public class RvListener {
                 try {
                     tibrvQueue = transportParameter.isStartInbox() ? new TibrvQueue() : Tibrv.defaultQueue();
                 } catch (TibrvException e) {
-                    System.err.println("Failed to create TibrvQueue:");
-                    e.printStackTrace();
+                    logger.error("Failed to create TibrvQueue:" + e.getLocalizedMessage(), e.getCause());
                     System.exit(0);
                 }
                 String query_subjectName = transportParameter.getQuerySubjectName();
@@ -80,9 +85,10 @@ public class RvListener {
                         response_subjectName = transportParameter.getQueryInbox();
                         new TibrvListener(tibrvQueue,//创建inbox监听
                                 messageRead, transport, response_subjectName, null);
+                        logger.debug("start inbox TibrvListener\t" + response_subjectName);
                     } catch (TibrvException e) {
-                        System.err.println("Failed to create listener:");
-                        e.printStackTrace();
+                        logger.error("Failed to create listener:\t" + response_subjectName
+                                + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
 
@@ -90,9 +96,10 @@ public class RvListener {
                     TibrvMsg query_msg = new TibrvMsg();
                     try {
                         query_msg.setSendSubject(query_subjectName);
+                        logger.debug("start TibrvListener\t" + query_subjectName);
                     } catch (TibrvException e) {
-                        System.err.println("Failed to set send subject:");
-                        e.printStackTrace();
+                        logger.error("Failed to set send subject:\t" + query_subjectName
+                                + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
 
@@ -100,21 +107,22 @@ public class RvListener {
                     //向主机发送消息，并接受消息，确认连通
                     try {
                         reply_msg = transport.sendRequest(query_msg, 10);
+                        logger.debug("net connect server\t" + query_subjectName);
                     } catch (TibrvException e) {
-                        System.err.println("Failed to detect server:");
-                        e.printStackTrace();
+                        logger.error("Failed to detect server:\t" + query_subjectName
+                                + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
 
                     // If timeout, reply message is null and query failed.
                     if (reply_msg == null) {
-                        System.err.println("Failed to detect server.");
+                        logger.error("Failed to detect server:\t" + query_subjectName);
                         System.exit(0);
                     }
                     // Report finding a server.
                     TibrvMsg server_msg = new TibrvMsg();
                     String server_subject = reply_msg.getReplySubject();
-                    System.out.println("tibrvclient successfully located a server: " +
+                    logger.debug("tibrvclient successfully located a server: " +
                             server_subject);
                     // Create a dispatcher with 5 second timeout to process server replies
                     TibrvDispatcher dispatcher = new TibrvDispatcher("Dispatcher", tibrvQueue, 5.0);
@@ -123,8 +131,8 @@ public class RvListener {
                         server_msg.setSendSubject(server_subject);
                         server_msg.setReplySubject(response_subjectName);
                     } catch (TibrvException e) {
-                        System.err.println("Failed to set subjects, fields for test message:");
-                        e.printStackTrace();
+                        logger.error("Failed to set subjects, fields for test message:\t" + query_subjectName
+                                + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
                 } else {
@@ -132,13 +140,12 @@ public class RvListener {
                     for (String subjectName : transportParameter.getSubject()) {
                         // create listener using default queue
                         try {
-                            System.out.println("是否启动？：\t" + transport.isValid());
                             new TibrvListener(tibrvQueue, messageRead, transport,
                                     subjectName, null);
-                            System.err.println("Listening on: " + subjectName);
+                            logger.info("Listening on: " + subjectName);
                         } catch (TibrvException e) {
-                            System.err.println("Failed to create listener:");
-                            e.printStackTrace();
+                            logger.error("Failed to create listener:\t" + subjectName
+                                    + e.getLocalizedMessage(), e.getCause());
                             System.exit(0);
 
                         }
@@ -152,10 +159,10 @@ public class RvListener {
             try {
                 tibrvQueue.dispatch();
             } catch (TibrvException e) {
-                System.err.println("Exception dispatching default queue:");
-                e.printStackTrace();
+                logger.error("Exception dispatching default queue:\t" + e.getLocalizedMessage(), e.getCause());
                 System.exit(0);
             } catch (InterruptedException ie) {
+                logger.error(ie.getLocalizedMessage(), ie.getCause());
                 System.exit(0);
             }
         }
@@ -208,6 +215,14 @@ public class RvListener {
             listMap.put(groupName, parameterList);
         }
         parameterList.add(parameter);
+        logger.debug("groupName\t" + groupName + "\tmessageName\t" + messageName
+                + "\tservice\t" + service
+                + "\tnetwork\t" + network
+                + "\tdaemon\t" + daemon
+                + "\tisStartInbox\t" + isStartInbox
+                + "\tservice\t" + service
+                + "\tsubjects\t" + Arrays.toString(subject)
+        );
         return parameter;
     }
 

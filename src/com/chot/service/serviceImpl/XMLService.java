@@ -1,7 +1,9 @@
 package com.chot.service.serviceImpl;
 
+import com.chot.utils.LoggerUtil;
 import com.chot.utils.XStreamUtil;
 import com.tibco.tibrv.TibrvMsg;
+import org.apache.log4j.Logger;
 
 /**
  * @version 1.0
@@ -12,8 +14,10 @@ import com.tibco.tibrv.TibrvMsg;
  */
 public class XMLService {
     private XStreamUtil xStreamUtil;
+    Logger logger;
 
     public XMLService() {
+        logger = LoggerUtil.getLogger();
         xStreamUtil = new XStreamUtil();
     }
 
@@ -22,9 +26,8 @@ public class XMLService {
         try {
             messageValue = xStreamUtil.toBean(readMessageCheck, cls);
         } catch (Exception e) {
-            System.err.println("无法识别的message,message有其他字段！");
-            System.out.println(readMessageCheck);
-            e.printStackTrace();
+            logger.error("无法识别的message,message有其他字段！"+ e.getLocalizedMessage());
+            logger.error(readMessageCheck);
         }
         if (messageValue != null) {
             println(messageValue, msg);// 打印
@@ -39,8 +42,8 @@ public class XMLService {
      */
     public void println(Object messageValue, TibrvMsg message) {
         Thread thread = Thread.currentThread();
-        System.err.println("线程ID：" + thread.getId() + "\t线程名称：" + thread.getName());
-        System.err.println(message.getSendSubject());
+        logger.info("线程ID：" + thread.getId() + "\t线程名称：" + thread.getName());
+        logger.info(message.getSendSubject());
 //        if (messageValue instanceof GetOicMainLotList) {
 //            GetOicMainLotList messageEntity = (GetOicMainLotList) messageValue;
 //

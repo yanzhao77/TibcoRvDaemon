@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.io.xml.Dom4JDriver;
 import com.thoughtworks.xstream.io.xml.Xpp3DomDriver;
 import com.thoughtworks.xstream.io.xml.Xpp3Driver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -18,6 +19,7 @@ import java.text.DecimalFormat;
  */
 public class XStreamUtil {
     XStream xStream;
+    static Logger logger;
 
     public XStreamUtil() {
         //重写 wrapMapper 抑制XStream: UnknownFieldException - No such field问题
@@ -57,6 +59,7 @@ public class XStreamUtil {
         xStream.setClassLoader(cls.getClassLoader());
         xStream.processAnnotations(cls);
         T obj = (T) xStream.fromXML(xmlStr);
+        logger.debug(obj.toString());
         return obj;
     }
 
@@ -67,6 +70,7 @@ public class XStreamUtil {
      * @return
      */
     public String toXML(Object object) throws Exception {
+        logger.debug(object.toString());
         return xStream.toXML(object);
     }
 
@@ -81,9 +85,10 @@ public class XStreamUtil {
         try {
             PrintWriter printWriter = new PrintWriter(xmlFileName, "UTF-8");
             xStream.toXML(object, printWriter);
+            logger.debug(object.toString());
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.getCause());
         }
     }
 
@@ -106,7 +111,7 @@ public class XStreamUtil {
                 br.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getCause());
         }
         return result.toString().trim();
     }
@@ -119,7 +124,7 @@ public class XStreamUtil {
      * @return 返回文件内容
      */
     public static boolean writteFile(String xmlvalue, String filePath) {
-        System.err.println(filePath);
+        logger.debug(filePath);
         File file = new File(filePath);
         FileWriter filewriter = null;
 
@@ -136,14 +141,14 @@ public class XStreamUtil {
             filewriter.write(xmlvalue);// 写出文件
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getCause());
         } finally {
             if (filewriter != null) {
                 try {
                     filewriter.close();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    logger.error(e.getCause());
                 }
             }
             return false;

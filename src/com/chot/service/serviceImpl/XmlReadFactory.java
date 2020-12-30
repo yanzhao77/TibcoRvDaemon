@@ -44,7 +44,7 @@ public class XmlReadFactory {
                         String message = checkMessage(tibrvMsg.toString());// message全文
                         String checkMessageName = getCheckMessageName(tibrvListener.getSubject());
                         if (checkMessageName == null) {
-                            System.out.println(message);
+                            logger.debug(message);
                             return;
                         }
                         String readMessageCheck = DocumentReadMessageCheck(message, tibrvMsg, checkMessageName);// 取出xml正文
@@ -100,11 +100,9 @@ public class XmlReadFactory {
                         // + messageName + "\\" + messageName
                         // + new Date().getTime() + ".xml");
                         if (element.getName().equals("MESSAGENAME")) {// 打印消息名称
-                            System.out.println("subject="
-                                    + msg.getSendSubject() + ", reply="
-                                    + msg.getReplySubject()
-                                    + ", messageName="
-                                    + element.getStringValue());
+                            logger.debug("subject=" + msg.getSendSubject()
+                                    + ", reply=" + msg.getReplySubject()
+                                    + ", messageName=" + element.getStringValue());
                         }
                         // 如果消息名称相同，就返回
                         return message;
@@ -114,7 +112,7 @@ public class XmlReadFactory {
             }
         } catch (DocumentException e) {
             // TODO Auto-generated catch block
-            System.err.println(e.getMessage());
+            logger.error(e.getLocalizedMessage(), e.getCause());
         }
         return null;
     }
@@ -125,14 +123,14 @@ public class XmlReadFactory {
      * @param sInputString
      * @return
      */
-    public static InputStream getStringStream(String sInputString) {
+    public InputStream getStringStream(String sInputString) {
         if (sInputString != null && !sInputString.trim().equals("")) {
             try {
                 ByteArrayInputStream tInputStringStream = new ByteArrayInputStream(
                         sInputString.getBytes());
                 return tInputStringStream;
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error(ex.getLocalizedMessage(), ex.getCause());
             }
         }
         return null;
@@ -195,6 +193,7 @@ public class XmlReadFactory {
     public void start() {
         xmlService = new XMLService();
         rvlistener.start();
+        logger.debug("start rvlistener");
     }
 
     /**
@@ -212,11 +211,9 @@ public class XmlReadFactory {
             rvlistenerInit(checkMessageName, subjectNames);
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage(), e.getCause());
         }
         rvlistener.setMessageRead(getMessageRead());
-//        String[] services = new String[]{service, network, daemon};
-//        String[] args = concat(services, subjectNames);
         rvlistener.setTransportParameter(null, checkMessageName, service, network, daemon, isStartInbox, subjectNames);
 
 

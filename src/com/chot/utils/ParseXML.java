@@ -1,10 +1,12 @@
 package com.chot.utils;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import sun.rmi.runtime.Log;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +22,12 @@ import java.util.Map;
  * <p>
  */
 public class ParseXML {
+    static Logger logger;
+
+    public ParseXML() {
+        logger = LoggerUtil.getLogger();
+    }
+
 
     /**
      * 读取xml中的数据
@@ -43,9 +51,10 @@ public class ParseXML {
             // 解析xml
             result = toMap(children, null);
         } catch (DocumentException e) {// 如果是空的，就是这个message不是个xml
+            logger.error(e.getLocalizedMessage(),e.getCause());
             return null;
         } catch (Exception e) {
-            System.err.print(e.getMessage());
+            logger.error(e.getLocalizedMessage(),e.getCause());
             throw e;
         } finally {
             if (reader != null) {
@@ -122,6 +131,7 @@ public class ParseXML {
             }
             rd.close();
         }
+        logger.debug(sb.toString());
         //
         return sb.toString();
     }
@@ -138,8 +148,8 @@ public class ParseXML {
                 ByteArrayInputStream tInputStringStream = new ByteArrayInputStream(
                         sInputString.getBytes());
                 return tInputStringStream;
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (Exception e) {
+                logger.error(e.getLocalizedMessage(),e.getCause());
             }
         }
         return null;
@@ -153,11 +163,11 @@ public class ParseXML {
             Map<String, Object> map = BeanUtils.describe(bean);
             return map;
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage(),e.getCause());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage(),e.getCause());
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage(),e.getCause());
         }
         return null;
     }
@@ -169,11 +179,11 @@ public class ParseXML {
             BeanUtils.populate(newBeanInstance, map);
             return newBeanInstance;
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage(),e.getCause());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage(),e.getCause());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage(),e.getCause());
         }
         return null;
     }
