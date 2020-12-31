@@ -40,7 +40,7 @@ public class CustomUnblockThreadPoolExecutor {
         logger.debug("start  ThreadPoolExecutor");
     }
 
-    public void destory() {
+    public void destroy() {
         if (pool != null) {
             pool.shutdownNow();
         }

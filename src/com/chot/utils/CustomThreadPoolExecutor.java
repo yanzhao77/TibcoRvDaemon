@@ -72,7 +72,7 @@ public class CustomThreadPoolExecutor {
     /**
      * 销毁线程池
      */
-    public void destory() {
+    public void destroy() {
         if (pool != null) {
             pool.shutdownNow();
         }

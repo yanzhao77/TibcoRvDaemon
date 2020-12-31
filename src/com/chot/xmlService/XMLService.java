@@ -1,10 +1,9 @@
-package com.chot.service.serviceImpl;
+package com.chot.xmlService;
 
 import com.chot.entity.messageEntity.CheckRecipeParameterRequest;
 import com.chot.entity.messageEntity.GetOicMainLotList;
 import com.chot.utils.LoggerUtil;
 import com.chot.utils.XStreamUtil;
-import com.thoughtworks.xstream.converters.ConversionException;
 import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
 import org.apache.log4j.Logger;

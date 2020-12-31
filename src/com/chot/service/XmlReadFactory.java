@@ -1,8 +1,9 @@
-package com.chot.service.serviceImpl;
+package com.chot.service;
 
 import com.chot.messageCheck.MessageReadCallback;
 import com.chot.rvLister.RvListener;
 import com.chot.utils.CustomThreadPoolExecutor;
+import com.chot.xmlService.XMLService;
 import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
 

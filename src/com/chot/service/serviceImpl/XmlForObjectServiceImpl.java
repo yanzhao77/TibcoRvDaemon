@@ -1,16 +1,9 @@
 package com.chot.service.serviceImpl;
 
 import com.chot.service.XmlForObjectService;
+import com.chot.service.XmlReadFactory;
 import com.chot.utils.LoggerUtil;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
-import java.io.File;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 
 /**

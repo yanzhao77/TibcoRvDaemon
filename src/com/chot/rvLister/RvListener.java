@@ -44,7 +44,6 @@ public class RvListener {
         }
 
         boolean isStartTransport = false;//判断是否启动成功
-
         for (String key : transportGroup.keySet()) {
             isStartTransport = false;
             List<TibrvRvdTransportParameter> transportParameterList = new ArrayList<>();
@@ -59,7 +58,6 @@ public class RvListener {
                 TibrvTransport transport = null;
                 try {
                     transport = transportParameter.getTibrvRvdTransport();
-                    isStartTransport = true;
                     logger.debug("service\t" + transportParameter.getService() + "\tnetwork\t"
                             + transportParameter.getNetwork()
                             + "\tdaemon\t" + transportParameter.getDaemon() + "\t启动成功");
@@ -73,6 +71,7 @@ public class RvListener {
                     isStartTransport = false;
                     continue;//启用备用机组
                 }
+                isStartTransport = transport.isValid();//确认rv机组是否打开
 
 
                 // Create a response queue
@@ -83,19 +82,19 @@ public class RvListener {
                     System.exit(0);
                 }
                 String query_subjectName = transportParameter.getQuerySubjectName();
-                String response_subjectName = null;
+                String inbox_subjectName = null;
                 if (transportParameter.isStartInbox()) {
                     //如果开启点对点通信，就创建
                     // Create an inbox subject for communication with the server and
                     // create a listener for this response subject.
                     //创建与服务器通信的收件箱主题，并为此响应主题创建侦听器。
                     try {
-                        response_subjectName = transportParameter.getQueryInbox();
+                        inbox_subjectName = transportParameter.getQueryInbox();
                         new TibrvListener(tibrvQueue,//创建inbox监听
-                                messageRead, transport, response_subjectName, null);
-                        logger.debug("start inbox TibrvListener\t" + response_subjectName);
+                                messageRead, transport, inbox_subjectName, null);
+                        logger.debug("start inbox TibrvListener\t" + inbox_subjectName);
                     } catch (TibrvException e) {
-                        logger.error("Failed to create listener:\t" + response_subjectName
+                        logger.error("Failed to create listener:\t" + inbox_subjectName
                                 + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
@@ -137,7 +136,7 @@ public class RvListener {
 
                     try {
                         server_msg.setSendSubject(server_subject);
-                        server_msg.setReplySubject(response_subjectName);
+                        server_msg.setReplySubject(inbox_subjectName);
                     } catch (TibrvException e) {
                         logger.error("Failed to set subjects, fields for test message:\t" + query_subjectName
                                 + e.getLocalizedMessage(), e.getCause());
