@@ -38,7 +38,7 @@ public class RvListener {
             messageRead = new MessageReadCallback() {
                 @Override
                 public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
-                    onMsgCallBack(tibrvListener, tibrvMsg);
+                    RvListener.this.onMsg(tibrvListener, tibrvMsg);
                 }
             };
         }
@@ -152,7 +152,7 @@ public class RvListener {
      * @param msg
      */
     @Deprecated
-    public void onMsgCallBack(TibrvListener listener, TibrvMsg msg) {
+    public void onMsg(TibrvListener listener, TibrvMsg msg) {
         System.out.println((new Date()).toString() +
                 ": subject=" + msg.getSendSubject() +
                 ", reply=" + msg.getReplySubject() +
