@@ -89,56 +89,11 @@ public class RvListener {
                     // create a listener for this response subject.
                     //创建与服务器通信的收件箱主题，并为此响应主题创建侦听器。
                     try {
-                        inbox_subjectName = transportParameter.getQueryInbox();
-                        new TibrvListener(tibrvQueue,//创建inbox监听
-                                messageRead, transport, inbox_subjectName, null);
+                        inbox_subjectName = transportParameter.getQueryInbox();//创建inbox监听
+                        new TibrvListener(tibrvQueue, messageRead, transport, inbox_subjectName, null);
                         logger.debug("start inbox TibrvListener\t" + inbox_subjectName);
                     } catch (TibrvException e) {
                         logger.error("Failed to create listener:\t" + inbox_subjectName
-                                + e.getLocalizedMessage(), e.getCause());
-                        System.exit(0);
-                    }
-
-                    // Create a message for the query.
-                    TibrvMsg query_msg = new TibrvMsg();
-                    try {
-                        query_msg.setSendSubject(query_subjectName);
-                        logger.debug("start TibrvListener\t" + query_subjectName);
-                    } catch (TibrvException e) {
-                        logger.error("Failed to set send subject:\t" + query_subjectName
-                                + e.getLocalizedMessage(), e.getCause());
-                        System.exit(0);
-                    }
-
-                    TibrvMsg reply_msg = null;
-                    //向主机发送消息，并接受消息，确认连通
-                    try {
-                        reply_msg = transport.sendRequest(query_msg, 10);
-                        logger.debug("net connect server\t" + query_subjectName);
-                    } catch (TibrvException e) {
-                        logger.error("Failed to detect server:\t" + query_subjectName
-                                + e.getLocalizedMessage(), e.getCause());
-                        System.exit(0);
-                    }
-
-                    // If timeout, reply message is null and query failed.
-                    if (reply_msg == null) {
-                        logger.error("Failed to detect server:\t" + query_subjectName);
-                        System.exit(0);
-                    }
-                    // Report finding a server.
-                    TibrvMsg server_msg = new TibrvMsg();
-                    String server_subject = reply_msg.getReplySubject();
-                    logger.debug("tibrvclient successfully located a server: " +
-                            server_subject);
-                    // Create a dispatcher with 5 second timeout to process server replies
-                    TibrvDispatcher dispatcher = new TibrvDispatcher("Dispatcher", tibrvQueue, 5.0);
-
-                    try {
-                        server_msg.setSendSubject(server_subject);
-                        server_msg.setReplySubject(inbox_subjectName);
-                    } catch (TibrvException e) {
-                        logger.error("Failed to set subjects, fields for test message:\t" + query_subjectName
                                 + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
@@ -184,11 +139,11 @@ public class RvListener {
      */
     @Deprecated
     public void onMsgCallBack(TibrvListener listener, TibrvMsg msg) {
-//        System.out.println((new Date()).toString() +
-//                ": subject=" + msg.getSendSubject() +
-//                ", reply=" + msg.getReplySubject() +
-//                ", message=" + msg.toString()
-//        );
+        System.out.println((new Date()).toString() +
+                ": subject=" + msg.getSendSubject() +
+                ", reply=" + msg.getReplySubject() +
+                ", message=" + msg.toString()
+        );
         //清空缓冲区，并将信息立即送出
         System.out.flush();
     }
