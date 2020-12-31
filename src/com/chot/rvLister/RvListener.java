@@ -97,6 +97,20 @@ public class RvListener {
                                 + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
+
+                    // Create a message for the query.服务器上注册
+                    TibrvMsg query_msg = new TibrvMsg();
+                    try {
+                        query_msg.setSendSubject(query_subjectName);
+                        query_msg.setReplySubject(inbox_subjectName);
+                        transport.send(query_msg);
+                        logger.debug("start TibrvListener\t" + query_subjectName);
+                    } catch (TibrvException e) {
+                        logger.error("Failed to set send subject:\t" + query_subjectName
+                                + e.getLocalizedMessage(), e.getCause());
+                        System.exit(0);
+                    }
+
                 } else {
                     // Create listeners for specified subjects
                     for (String subjectName : transportParameter.getSubject()) {
