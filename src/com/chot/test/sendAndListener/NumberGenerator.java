@@ -1,18 +1,14 @@
-package com.chot.test.rvfault;
+package com.chot.test.sendAndListener;
+
+import com.tibco.tibrv.*;
 
 import java.io.UnsupportedEncodingException;
-
-import com.tibco.tibrv.Tibrv;
-import com.tibco.tibrv.TibrvException;
-import com.tibco.tibrv.TibrvMsg;
-import com.tibco.tibrv.TibrvRvdTransport;
-import com.tibco.tibrv.TibrvTransport;
 
 public class NumberGenerator {
     private String service = "7500";
     private String network = ";225.1.1.1";
-    private String daemons = "tcp:7500";
-    private String subject = "DEMO.FT.NUM";
+    private String daemons = "10.56.14.176:7500";
+    private String subject = "DEMO.Demosvr";
 
 
     public void run() {
