@@ -147,6 +147,30 @@ public class CheckRecipeParameterRequest {
     @XStreamAlias("BODY")
     public class Body {
 
+        @XStreamAlias("FACTORYNAME")
+        @XStreamAsAttribute
+        String factoryName;
+
+        @XStreamAlias("EVENTUSER")
+        @XStreamAsAttribute
+        String eventUser;
+
+        @XStreamAlias("EVENTCOMMENT")
+        @XStreamAsAttribute
+        String eventComment;
+
+        @XStreamAlias("LANGUAGE")
+        @XStreamAsAttribute
+        String language;
+
+        @XStreamAlias("SOFTWAREVERSION")
+        @XStreamAsAttribute
+        String softWarEversion;
+
+        @XStreamAlias("OPERATEFORMNAME")
+        @XStreamAsAttribute
+        String operateFormName;
+
         @XStreamAlias("LINENAME")
         @XStreamAsAttribute
         String lineName;
@@ -200,6 +224,54 @@ public class CheckRecipeParameterRequest {
 
         public void setTransactionStartTime(String transactionStartTime) {
             this.transactionStartTime = transactionStartTime;
+        }
+
+        public String getFactoryName() {
+            return factoryName;
+        }
+
+        public void setFactoryName(String factoryName) {
+            this.factoryName = factoryName;
+        }
+
+        public String getEventUser() {
+            return eventUser;
+        }
+
+        public void setEventUser(String eventUser) {
+            this.eventUser = eventUser;
+        }
+
+        public String getEventComment() {
+            return eventComment;
+        }
+
+        public void setEventComment(String eventComment) {
+            this.eventComment = eventComment;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
+        }
+
+        public String getSoftWarEversion() {
+            return softWarEversion;
+        }
+
+        public void setSoftWarEversion(String softWarEversion) {
+            this.softWarEversion = softWarEversion;
+        }
+
+        public String getOperateFormName() {
+            return operateFormName;
+        }
+
+        public void setOperateFormName(String operateFormName) {
+            this.operateFormName = operateFormName;
         }
     }
 

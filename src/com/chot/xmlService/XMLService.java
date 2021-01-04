@@ -28,17 +28,12 @@ import java.util.regex.Pattern;
  * @Created by yan34177
  */
 public class XMLService {
-    private XStreamUtil xStreamUtil;
     Map<String, String> subjectNameForCheckMessageNameMap;//监听的频道和监听的messageName
+    Map<String, XStreamUtil> messageXStreamMap;//类加载器
     Logger logger;
 
     public XMLService() {
         logger = LoggerUtil.getLogger();
-        try {
-            xStreamUtil = new XStreamUtil();
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage(), e.getCause());
-        }
     }
 
 
@@ -200,7 +195,13 @@ public class XMLService {
     public void rvlistenerInit(String checkMessageName, String... subjectNameArr) {
         if (checkMessageName == null) return;
         for (String subjectName : subjectNameArr) {
-            setCheckMessageName(subjectName, checkMessageName);
+            try {
+                setCheckMessageName(subjectName, checkMessageName);
+            } catch (ClassNotFoundException e) {
+                logger.error(e.getLocalizedMessage());
+            } catch (Exception e) {
+                logger.error(e.getLocalizedMessage());
+            }
         }
     }
 
@@ -208,10 +209,10 @@ public class XMLService {
         Object messageValue = null;// 抓取的消息obj
         try {
             Class cls = getClassForCheckMessageName(checkMessageName);
-            messageValue = xStreamUtil.toBean(readMessage, cls);
+            messageValue = getMessageXStreamMap().get(checkMessageName).toBean(readMessage, cls);
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
-//            logger.error(readMessage);
+            logger.error(readMessage);
         }
         if (messageValue != null) {
             println(messageValue, msg);// 打印
@@ -256,12 +257,24 @@ public class XMLService {
         this.subjectNameForCheckMessageNameMap = messageNameMap;
     }
 
+    public Map<String, XStreamUtil> getMessageXStreamMap() {
+        if (messageXStreamMap == null) {
+            messageXStreamMap = new HashMap<>();
+        }
+        return messageXStreamMap;
+    }
+
+    public void setMessageXStreamMap(Map<String, XStreamUtil> messageClassMap) {
+        this.messageXStreamMap = messageClassMap;
+    }
+
     public String getCheckMessageName(String subjectName) {
         return getSubjectNameForCheckMessageNameMap().get(subjectName);
     }
 
-    public void setCheckMessageName(String subjectName, String checkMessageName) {
+    public void setCheckMessageName(String subjectName, String checkMessageName) throws Exception {
         getSubjectNameForCheckMessageNameMap().put(subjectName, checkMessageName);
+        getMessageXStreamMap().put(checkMessageName, new XStreamUtil());
     }
 
 }

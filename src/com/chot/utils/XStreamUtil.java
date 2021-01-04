@@ -24,7 +24,7 @@ public class XStreamUtil {
     public XStreamUtil() throws Exception {
         //重写 wrapMapper 抑制XStream: UnknownFieldException - No such field问题
         //Dom4JDriver速度太慢，导致任务执行溢出队列，更换xpp3驱动
-        xStream = new XStream(new Xpp3DomDriver()) {
+        xStream = new XStream(new Xpp3Driver()) {
             @Override
             protected MapperWrapper wrapMapper(MapperWrapper next) {
                 return new MapperWrapper(next) {
