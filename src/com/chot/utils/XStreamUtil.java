@@ -51,7 +51,7 @@ public class XStreamUtil {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public <T> T toBean(String xmlStr, Class<T> cls) {
+    public synchronized  <T> T toBean(String xmlStr, Class<T> cls) {
         xStream.setClassLoader(cls.getClassLoader());
         xStream.processAnnotations(cls);
         T obj = (T) xStream.fromXML(xmlStr);

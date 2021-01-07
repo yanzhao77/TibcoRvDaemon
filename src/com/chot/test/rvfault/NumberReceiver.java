@@ -10,14 +10,15 @@ import com.tibco.tibrv.TibrvMsgCallback;
 import com.tibco.tibrv.TibrvRvdTransport;
 
 public class NumberReceiver implements TibrvMsgCallback, TibrvFtMemberCallback, Runnable {
-    private String service = "7500";
+    private String service = "1000";
     private String network = ";225.1.1.1";
-    private String daemon = "tcp:7500";
-    private String subject = "DEMO.FT.NUM";//主
+    private String daemon = "10.56.200.238:7500";
+    private String subject = "DEMO.Demosvr";//主
 
-    private String ftservice = "7504";//备
-    private String ftnetwork = ";225.1.10.1";
-    private String ftdaemon = "tcp:7504";
+    private String ftservice = "7500";
+    private String ftnetwork = ";225.1.1.1";
+    ;
+    private String ftdaemon = "10.56.14.176:7500";
 
     private String ftgroupName = "DEMO.FT.GROUP";//daemon组，同一个group name的程序为一个群组，互相备份
     private int ftweight = 10;//权重，由 1 到整數的最大值，數字越大優先權越大
@@ -75,10 +76,10 @@ public class NumberReceiver implements TibrvMsgCallback, TibrvFtMemberCallback, 
         }
     }
 
-    void enableListener() {
+    void enableListener(TibrvFtMember member) {
         try {
             // Subscribe to subject
-            listener = new TibrvListener(Tibrv.defaultQueue(), this, transport, subject, null);
+            listener = new TibrvListener(Tibrv.defaultQueue(), this, member.getTransport(), subject, null);
             System.out.println("Start Listening on: " + subject);
         } catch (TibrvException e) {
             System.err.println("Failed to create subject listener:");
@@ -86,25 +87,35 @@ public class NumberReceiver implements TibrvMsgCallback, TibrvFtMemberCallback, 
         }
     }
 
-    void disableListener() {
+    void disableListener(TibrvFtMember member) {
         listener.destroy();
         System.out.println("Destroy Listener on Subject: " + subject);
     }
 
+    /**
+     * 容错机制
+     *
+     * @param member
+     * @param ftgroupName
+     * @param action
+     */
     @Override
     public void onFtAction(TibrvFtMember member, String ftgroupName, int action) {
         if (action == TibrvFtMember.PREPARE_TO_ACTIVATE) {
-            System.out.println("TibrvFtMember.PREPARE_TO_ACTIVATE invoked...");
+            //准备激活
+            System.out.println("TibrvFtMember.PREPARE_TO_ACTIVATE invoked...准备激活");
             System.out.println("*** PREPARE TO ACTIVATE: " + ftgroupName);
         } else if (action == TibrvFtMember.ACTIVATE) {
-            System.out.println("TibrvFtMember.ACTIVATE invoked...");
+            //立即激活
+            System.out.println("TibrvFtMember.ACTIVATE invoked...立即激活");
             System.out.println("*** ACTIVATE: " + ftgroupName);
-            enableListener();
+            enableListener(member);
             active = true;
         } else if (action == TibrvFtMember.DEACTIVATE) {
-            System.out.println("TibrvFtMember.DEACTIVATE invoked...");
+            //立即停用
+            System.out.println("TibrvFtMember.DEACTIVATE invoked...立即停用");
             System.out.println("*** DEACTIVATE: " + ftgroupName);
-            disableListener();
+            disableListener(member);
             active = false;
         }
     }

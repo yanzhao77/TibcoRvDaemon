@@ -30,7 +30,13 @@ public class testRv {
             public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
                 System.out.println(tibrvMsg.getSendSubject());
             }
+
+            @Override
+            public void onFtAction(TibrvFtMember member, String groupName, int action) {
+
+            }
         };
+
 
     }
 
@@ -72,53 +78,6 @@ public class testRv {
             }
         }
 
-//
-//        String service = "8400";
-//        String network = ";225.16.16.4";
-//        String daemon = "tcp:10.50.10.66:7500";
-//        String subjectACFCNMsvr = "CHOT.G86.ACFMES.PROD.CNMsvr";
-//
-//        TibrvTransport transport = null;
-//        try {
-//            transport = new TibrvRvdTransport(service, network, daemon);
-//        } catch (TibrvException e) {
-//            //如果这个备份机不可用，就启动其他的，
-//        }
-//
-//        try {
-//            new TibrvListener(tibrvQueue, messageReadCallback, transport,
-//                    subjectACFCNMsvr, null);
-//            System.err.println("Listening on: " + subjectACFCNMsvr);
-//        } catch (TibrvException e) {
-//            System.err.println("Failed to create listener:");
-//            e.printStackTrace();
-//            System.exit(0);
-//        }
-//
-//        String serviceTEST = "7500";
-//        String networkTEST = ";225.1.1.1";
-//        String daemonTEST = "tcp:7500";
-//        String subjectACFTESTsvr = "DEMO.FT.NUM";
-//        TibrvTransport transport2 = null;
-//        try {
-//            transport2 = new TibrvRvdTransport(serviceTEST, networkTEST, daemonTEST);
-//        } catch (TibrvException e) {
-//            //如果这个备份机不可用，就启动其他的，
-//            e.getMessage();
-//        }
-//
-//        try {
-//            new TibrvListener(tibrvQueue, messageReadCallback, transport2,
-//                    subjectACFTESTsvr, null);
-//            System.err.println("Listening on: " + subjectACFTESTsvr);
-//        } catch (TibrvException e) {
-//            System.err.println("Failed to create listener:");
-//            e.printStackTrace();
-//            System.exit(0);
-//        }
-
-
-        // dispatch Tibrv events
         startt(tibrvQueue);
     }
 

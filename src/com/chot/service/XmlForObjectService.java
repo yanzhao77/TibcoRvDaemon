@@ -1,5 +1,7 @@
 package com.chot.service;
 
+import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
+
 import java.util.List;
 
 /**
@@ -35,6 +37,18 @@ public interface XmlForObjectService {
      */
     void rvListenerGroupInit(String groupName, String checkMessageName, String[][] serviceArr,
                              boolean isStartInbox, String... subjectNames);
+
+    /**
+     * 主备机组监听
+     *
+     * @param groupName        机组名称
+     * @param checkMessageName 监听的消息名称
+     * @param parameterList    主机和备份机参数
+     * @param isStartInbox     是否开启inbox
+     * @param subjectNames     监听的频道参数
+     */
+    void rvListenerObjGroupInit(String groupName, String checkMessageName, List<TibrvRvdTransportParameter> parameterList,
+                                boolean isStartInbox, String... subjectNames);
 
     /**
      * 启动监听

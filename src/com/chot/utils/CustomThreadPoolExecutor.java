@@ -2,6 +2,9 @@ package com.chot.utils;
 
 import org.apache.log4j.Logger;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,17 +40,26 @@ public class CustomThreadPoolExecutor {
             public void run() {
                 while (true) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                         printlnThreadValue();
                     } catch (InterruptedException e) {
                         logger.error(e.getLocalizedMessage(), e.getCause());
                     }
-
                 }
             }
         });
         daemonThread.setDaemon(true);
         daemonThread.start();
+
+        //定时垃圾回收
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.gc();
+                System.err.println("System.gc");
+            }
+        }, 0, 50 * 1000);//每18分钟执行一次垃圾回收
     }
 
     /**

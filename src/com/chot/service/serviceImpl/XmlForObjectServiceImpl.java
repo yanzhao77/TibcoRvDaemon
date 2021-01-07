@@ -1,9 +1,12 @@
 package com.chot.service.serviceImpl;
 
+import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 import com.chot.service.XmlForObjectService;
 import com.chot.service.XmlReadFactory;
 import com.chot.utils.LoggerUtil;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 
 /**
@@ -53,6 +56,20 @@ public class XmlForObjectServiceImpl implements XmlForObjectService {
     public void rvListenerGroupInit(String groupName, String checkMessageName, String[][] serviceArr,
                                     boolean isStartInbox, String... subjectNames) {
         xmlReadForCheck.initGroups(groupName, checkMessageName, serviceArr, isStartInbox, subjectNames);
+    }
+
+    /**
+     * 主备机组监听
+     *
+     * @param groupName        机组名称
+     * @param checkMessageName 监听的消息名称
+     * @param parameterList       主机和备份机参数
+     * @param isStartInbox     是否开启inbox
+     * @param subjectNames     监听的频道参数
+     */
+    public void rvListenerObjGroupInit(String groupName, String checkMessageName, List<TibrvRvdTransportParameter> parameterList,
+                                       boolean isStartInbox, String... subjectNames) {
+        xmlReadForCheck.initObjGroup(groupName, checkMessageName, parameterList, isStartInbox, subjectNames);
     }
 
     /**

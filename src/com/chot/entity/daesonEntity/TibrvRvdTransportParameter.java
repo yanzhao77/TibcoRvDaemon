@@ -1,9 +1,10 @@
 package com.chot.entity.daesonEntity;
 
 import com.tibco.tibrv.TibrvException;
+import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvRvdTransport;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class TibrvRvdTransportParameter {
 
@@ -24,7 +25,7 @@ public class TibrvRvdTransportParameter {
     String inbox;
 
     private TibrvRvdTransport tibrvRvdTransport;
-
+    private Map<TibrvRvdTransport, TibrvListener> tibrvListenerMap;
     private String messageName;//要检查的message
 
     public TibrvRvdTransportParameter(String service, String network, String daemon, String[] subject) {
@@ -42,6 +43,12 @@ public class TibrvRvdTransportParameter {
         this.subject = subject;
     }
 
+    public TibrvRvdTransportParameter(String service, String network, String daemon, int ftWeight) {
+        this.service = service;
+        this.network = network;
+        this.daemon = daemon;
+        this.ftWeight = ftWeight;
+    }
 
     /**
      * 设置名称和备注信息
@@ -213,5 +220,14 @@ public class TibrvRvdTransportParameter {
         return null != inbox ? inbox : getTibrvRvdTransport().createInbox();
     }
 
+    public Map<TibrvRvdTransport, TibrvListener> getTibrvListenerMap() {
+        if (tibrvListenerMap == null) {
+            tibrvListenerMap = new HashMap<>();
+        }
+        return tibrvListenerMap;
+    }
 
+    public void setTibrvListenerMap(TibrvRvdTransport transport, TibrvListener listener) {
+        getTibrvListenerMap().put(transport, listener);
+    }
 }

@@ -1,50 +1,56 @@
 package com.chot;
 
 
+import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 import com.chot.service.XmlForObjectService;
 import com.chot.service.serviceImpl.XmlForObjectServiceImpl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class RVDemoMain {
 
     public static void main(String[] args) throws ClassNotFoundException {
         XmlForObjectService xmlReadStr = new XmlForObjectServiceImpl();
-
-        // prod监听
-        String service = "8400";
-        String network = ";225.16.16.4";
-        String daemon = "tcp:10.50.10.66:7500";
-        String ACFCNMsvr = "CHOT.G86.ACFMES.PROD.CNMsvr";
-        String OCCNMsvr = "CHOT.G86.OCMES.PROD.CNMsvr";
-        String CNMsvr = "CHOT.G86.MES.PROD.CNMsvr";
         String messageName = "GetOicMainLotList";// 要拦截的message的名称
-        xmlReadStr.rvListenerInit(messageName, service, network, daemon, false,
-                ACFCNMsvr, OCCNMsvr, CNMsvr);
+        // prod监听
+//        String service = "8400";
+//        String network = ";225.16.16.4";
+//        String daemon = "tcp:10.50.10.66:7500";
+//        String ACFCNMsvr = "CHOT.G86.ACFMES.PROD.CNMsvr";
 
+//        String serviceTEST = "8410";
+//        String networkTEST = ";225.9.9.4";
+//        String daemonTEST = "10.50.10.72:7500";
+//        String ACFTESTsvr = "CHOT.G86.ACFMES.TEST.CNMsvr";
 
-        String serviceTEST = "8200";
-        String networkTEST = ";225.16.16.2";
-        String daemonTEST = "10.50.10.72:7500";
-        String OCTESTsvr = "CHOT.G86.OCMES.PROD.PEMsvr";
-        String ACFTESTsvr = "CHOT.G86.ACFMES.PROD.PEMsvr";
-        String TESTsvr = "CHOT.G86.FMES.PROD.PEMsvr";
-        String messageNameTEST = "CheckRecipeParameterRequest";
+        String service = "7500";
+        String network = ";225.1.1.1";
+        String daemons = "10.56.14.176:7500";
+        String subject = "DEMO.Demosvr";
 
-        //启动主备机制，如果启动时报错，就切换到备用机
-        String[][] serviceArr = new String[][]{new String[]{service, network + "22", daemon},
-                new String[]{serviceTEST, networkTEST, daemonTEST}};
-        xmlReadStr.rvListenerGroupInit("PEMsvr", messageNameTEST, serviceArr, false,
-                OCTESTsvr, ACFTESTsvr, TESTsvr);
-
-        //测试其他服务器
-        String service2 = "7500";
+        String service2 = "1000";
         String network2 = ";225.1.1.1";
         String daemon2 = "10.56.200.238:7500";
         String subject2 = "DEMO.Demosvr";
 
-        xmlReadStr.rvListenerInit(null, service2, network2, daemon2, false, subject2);
+
+        //启动主备机制，如果启动时报错，就切换到备用机
+        List<TibrvRvdTransportParameter> rvdTransportList = new ArrayList<>();
+        rvdTransportList.add(new TibrvRvdTransportParameter(service2, network2, daemon2, 1));
+        rvdTransportList.add(new TibrvRvdTransportParameter(service, network, daemons, 1));
+        xmlReadStr.rvListenerObjGroupInit("CNMsvr", messageName, rvdTransportList, false, subject2);
+
+        //测试其他服务器
+//        String service2 = "7500";
+//        String network2 = ";225.1.1.1";
+//        String daemon2 = "10.56.200.238:7500";
+//        String subject2 = "DEMO.Demosvr";
+
+//        xmlReadStr.rvListenerInit(null, service2, network2, daemon2, false, subject2);
+
+
         xmlReadStr.start();
     }
 
