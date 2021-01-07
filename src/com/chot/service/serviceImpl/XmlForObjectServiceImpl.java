@@ -1,8 +1,8 @@
 package com.chot.service.serviceImpl;
 
+import com.chot.controller.MessageController;
 import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 import com.chot.service.XmlForObjectService;
-import com.chot.service.XmlReadFactory;
 import com.chot.utils.LoggerUtil;
 import org.apache.log4j.Logger;
 
@@ -19,12 +19,12 @@ import java.util.List;
  * @Created by yan34177
  */
 public class XmlForObjectServiceImpl implements XmlForObjectService {
-    private XmlReadFactory xmlReadForCheck;
+    private MessageController xmlReadForCheck;
     Logger logger;
 
     public XmlForObjectServiceImpl() {
         logger = LoggerUtil.getLogger();
-        xmlReadForCheck = new XmlReadFactory(logger);
+        xmlReadForCheck = new MessageController(logger);
 
     }
 

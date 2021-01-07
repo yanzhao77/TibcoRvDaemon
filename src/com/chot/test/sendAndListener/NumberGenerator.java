@@ -9,16 +9,16 @@ public class NumberGenerator {
     private String network = ";225.1.1.1";
     private String daemons = "10.56.14.176:7500";
     private String subject = "DEMO.Demosvr";
-
+    private int num = 100000000;
 
     public void run() {
         try {
             Tibrv.open(Tibrv.IMPL_NATIVE);
             TibrvMsg.setStringEncoding("Big5");
             TibrvTransport transport = new TibrvRvdTransport(service, network, daemons);
+            TibrvMsg msg = new TibrvMsg();
 
-            for (int i = 1; i <= 1000; i++) {
-                TibrvMsg msg = new TibrvMsg();
+            for (int i = 1; i <= num; i++) {
                 msg.setSendSubject(subject);
                 msg.update("number", i);
                 System.out.println("number" + i);

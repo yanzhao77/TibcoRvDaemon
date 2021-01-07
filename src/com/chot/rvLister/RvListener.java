@@ -6,16 +6,17 @@ import com.chot.utils.LoggerUtil;
 import com.tibco.tibrv.*;
 import org.apache.log4j.Logger;
 
+import java.sql.Time;
+import java.time.Instant;
 import java.util.*;
 
 public class RvListener {
-
     MessageReadCallback messageRead;//统一的消息处理
     Logger logger;
-    /**
-     * 这里是两层结构，Map的key是它的group名字，如果有备份的机组，就使用单个
-     */
     Map<String, List<TibrvRvdTransportParameter>> transportGroup;//多个server
+    Map<TibrvRvdTransportParameter, Long> timerIntervalMessageMap;//如果这个timr在指定时间内没有收到消息，那么就切换监听，
+    TibrvTransport transport;//当前正在运行的transport,(主备切换)
+    public long stoptime = 60;//如果一分钟之内，主备机组都启动不了，就退出程序
 
     public RvListener() {
         logger = LoggerUtil.getLogger();
@@ -45,9 +46,18 @@ public class RvListener {
                 public void onFtAction(TibrvFtMember member, String groupName, int action) {
                     RvListener.this.onFtAction(member, groupName, action);
                 }
+
+                @Override
+                public void onFtMonitor(TibrvFtMonitor ftMonitor, String ftgroupName, int numActive) {
+                    RvListener.this.onFtMonitor(ftMonitor, ftgroupName, numActive);
+                }
+
+                @Override
+                public void onTimer(TibrvTimer tibrvTimer) {
+                    RvListener.this.onTimer(tibrvTimer);
+                }
             };
         }
-
         boolean isStartTransport = false;//判断是否启动成功
         boolean isFirstFlag = true;//判断是否是首次启动
         for (String key : transportGroup.keySet()) {
@@ -60,7 +70,21 @@ public class RvListener {
                 TibrvTransport transport = null;
                 try {
                     transport = transportParameter.getTibrvRvdTransport();
+                    //启动一个定时器监听是否消息继续传输,设定5秒
+                    try {
+                        TibrvTimer fttimer = new TibrvTimer(Tibrv.defaultQueue(), messageRead, 5.0, transport);
+                        getTimerIntervalMessageMap().put(transportParameter, new Date().getTime());
+                    } catch (TibrvException e) {
+                        logger.error("Failed to create timer:" + e.getLocalizedMessage());
+                        System.exit(0);
+                    }
+
                     if (!key.equals("default")) {
+                        new TibrvFtMonitor(Tibrv.defaultQueue(), // TibrvQueue
+                                messageRead,                 // TibrvFtMemberCallback
+                                transportParameter.getTibrvRvdTransport(),          // TibrvTransport
+                                transportParameter.getGroupName(),
+                                transportParameter.getLostInterval(), null);
                         if (!isFirstFlag) {
                             new TibrvFtMember(Tibrv.defaultQueue(), // TibrvQueue
                                     messageRead,                 // TibrvFtMemberCallback
@@ -72,7 +96,6 @@ public class RvListener {
                                     transportParameter.getPrepareInterval(),      // 准备时间间隔,
                                     // Zero is a special value,零是一个特殊值
                                     // indicating that the member does 指示成员不需要预先警告即可激活
-                                    // not need advance warning to activate
                                     transportParameter.getActivateInterval(),     // activationInterval 激活间隔
                                     null);
                         }
@@ -98,6 +121,7 @@ public class RvListener {
                 }
                 isStartTransport = transport.isValid();//确认rv机组是否打开
                 isFirstFlag = false;
+
 
                 // Create a response queue
                 try {
@@ -141,8 +165,9 @@ public class RvListener {
                     for (String subjectName : transportParameter.getSubject()) {
                         // create listener using default queue
                         try {
-                            new TibrvListener(tibrvQueue, messageRead, transport,
+                            TibrvListener tibrvListener = new TibrvListener(tibrvQueue, messageRead, transport,
                                     subjectName, null);
+                            transportParameter.setTibrvListenerMap((TibrvRvdTransport) transport, tibrvListener);
                             logger.info("Listening on: " + subjectName);
                         } catch (TibrvException e) {
                             logger.error("Failed to create listener:\t" + subjectName
@@ -152,6 +177,7 @@ public class RvListener {
                         }
                     }
                 }
+                this.transport = transport;
             }
         }
 
@@ -170,13 +196,7 @@ public class RvListener {
 
     }
 
-    /**
-     * 消息接收处理放在XmlReadFactory
-     *
-     * @param listener
-     * @param msg
-     */
-    @Deprecated
+
     public void onMsg(TibrvListener listener, TibrvMsg msg) {
         System.out.println((new Date()).toString() +
                 ": subject=" + msg.getSendSubject() +
@@ -190,19 +210,19 @@ public class RvListener {
     public void onFtAction(TibrvFtMember member, String ftgroupName, int action) {
         if (action == TibrvFtMember.PREPARE_TO_ACTIVATE) {
             System.out.println("TibrvFtMember.PREPARE_TO_ACTIVATE invoked...");
-            System.out.println("*** PREPARE TO ACTIVATE: " + ftgroupName);
         } else if (action == TibrvFtMember.ACTIVATE) {
             System.out.println("TibrvFtMember.ACTIVATE invoked...");
-            System.out.println("*** ACTIVATE: " + ftgroupName);
-//            enableListener();
-//            active = true;
         } else if (action == TibrvFtMember.DEACTIVATE) {
             System.out.println("TibrvFtMember.DEACTIVATE invoked...");
-            System.out.println("*** DEACTIVATE: " + ftgroupName);
-//            disableListener();
-//            active = false;
         }
-        ;
+    }
+
+    public void onTimer(TibrvTimer tibrvTimer) {
+        System.out.println("定时器");
+    }
+
+    public void onFtMonitor(TibrvFtMonitor ftMonitor, String ftgroupName, int numActive) {
+        System.out.println("RV挂掉");
     }
 
     /**
@@ -332,5 +352,24 @@ public class RvListener {
             transportGroup = new HashMap<>();
         }
         return transportGroup;
+    }
+
+    public Map<TibrvRvdTransportParameter, Long> getTimerIntervalMessageMap() {
+        if (timerIntervalMessageMap == null) {
+            timerIntervalMessageMap = new HashMap<>();
+        }
+        return timerIntervalMessageMap;
+    }
+
+    public void setTimerIntervalMessageMap(TibrvRvdTransportParameter timer, long messageTime) {
+        getTimerIntervalMessageMap().put(timer, messageTime);
+    }
+
+    public TibrvTransport getTransport() {
+        return transport;
+    }
+
+    public void setTransport(TibrvTransport transport) {
+        this.transport = transport;
     }
 }

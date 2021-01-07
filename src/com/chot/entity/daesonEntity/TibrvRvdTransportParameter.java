@@ -11,12 +11,12 @@ public class TibrvRvdTransportParameter {
     private String groupName = "default";//group名字 //daemon组，同一个group name的程序为一个群组，互相备份
 
     private int ftWeight = 50;//权重，由 1 到整數的最大值，數字越大優先權越大
-    private int activeGoalNum = 1;//實務上要有幾支程式處於 ACTIVATE 狀態是可以設定的，這個數字稱為 active goal
+    private int activeGoalNum = 2;//實務上要有幾支程式處於 ACTIVATE 狀態是可以設定的，這個數字稱為 active goal
     private double hbInterval = 1.5;//心跳时间间隔
     private double prepareInterval = 3;//准备时间间隔
     private double activateInterval = 4.8;//激活间隔
     boolean startInbox = false; //是否开启开启inbox
-
+    private double lostInterval = 4.8;     // 活动成员的心跳间隔时间
     String service;
     String network;
     String daemon;
@@ -25,7 +25,7 @@ public class TibrvRvdTransportParameter {
     String inbox;
 
     private TibrvRvdTransport tibrvRvdTransport;
-    private Map<TibrvRvdTransport, TibrvListener> tibrvListenerMap;
+    private Map<TibrvRvdTransport, List<TibrvListener>> tibrvListenerMap;
     private String messageName;//要检查的message
 
     public TibrvRvdTransportParameter(String service, String network, String daemon, String[] subject) {
@@ -213,6 +213,14 @@ public class TibrvRvdTransportParameter {
         this.messageName = messageName;
     }
 
+    public double getLostInterval() {
+        return lostInterval;
+    }
+
+    public void setLostInterval(double lostInterval) {
+        this.lostInterval = lostInterval;
+    }
+
     public String getQueryInbox() throws TibrvException {
         if (!isStartInbox()) {
             return null;
@@ -220,7 +228,7 @@ public class TibrvRvdTransportParameter {
         return null != inbox ? inbox : getTibrvRvdTransport().createInbox();
     }
 
-    public Map<TibrvRvdTransport, TibrvListener> getTibrvListenerMap() {
+    public Map<TibrvRvdTransport, List<TibrvListener>> getTibrvListenerMap() {
         if (tibrvListenerMap == null) {
             tibrvListenerMap = new HashMap<>();
         }
@@ -228,6 +236,10 @@ public class TibrvRvdTransportParameter {
     }
 
     public void setTibrvListenerMap(TibrvRvdTransport transport, TibrvListener listener) {
-        getTibrvListenerMap().put(transport, listener);
+        if (getTibrvListenerMap().get(transport) == null) {
+            getTibrvListenerMap().put(transport, new ArrayList<>());
+        }
+        getTibrvListenerMap().get(transport).add(listener);
+
     }
 }

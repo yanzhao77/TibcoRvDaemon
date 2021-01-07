@@ -3,6 +3,7 @@ package com.chot.xmlService;
 import com.chot.entity.messageEntity.CheckRecipeParameterRequest;
 import com.chot.entity.messageEntity.GetOicMainLotList;
 import com.chot.utils.LoggerUtil;
+import com.chot.utils.ParseXML;
 import com.chot.utils.XStreamUtil;
 import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
@@ -75,6 +76,8 @@ public class XMLService {
         if (readMessageCheck != null) {
             toJavaBan(readMessageCheck, checkMessageName, tibrvMsg);
         }
+        // 如果xStream无法识别，就使用map解析
+//        Map<String, Object> objectMap = ParseXML.parserXml(message);
     }
 
     /**
