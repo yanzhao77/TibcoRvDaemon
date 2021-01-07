@@ -21,7 +21,7 @@
 
 在需要监听多个service时，只需要将参数保存到集合里，遍历创建不同的TibrvTransport
 和对应的TibrvListener即可
-![inbox创建与监听](resources\picture\监听多个service.png)
+![inbox创建与监听](https://github.com/yanzhao77/rvListerDemo/blob/master/resources\picture\监听多个service.png)
 
 
 #### RV 消息监听 –主备机制
