@@ -11,7 +11,7 @@
 
          #### RV 消息监听流程
 
-         ![inbox创建与监听](resources\picture\总流程图.png)
+         ![inbox创建与监听](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E6%80%BB%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
 
 #### RV 消息监听处理架构图
 
