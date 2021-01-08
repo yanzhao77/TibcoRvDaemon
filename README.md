@@ -56,5 +56,5 @@ inbox监听是在指定RV的service，network，deason后，指定点对点的�
 ，在daemon发送错误信息时，根据信息情况，自动切换到备用机上
 在rv消息接收过程中，如果发送端在发送完成或者在发送过程中被关闭，守护进程会在相应的——RV.*频道进行广播告知接收端。基于此机制，可以进行监听RV系统频道。
 如果守护进程（daemon）出现发送异常信息，那么就可以根据相应的信息进行主备切换或者刷新备用机的状态信息
-![监听系统通知 –动态主备机制](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E4%B8%BB%E5%A4%87%E6%9C%BA%E5%88%B6.png)
+![监听系统通知 –动态主备机制](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E5%8A%A8%E6%80%81%E4%B8%BB%E5%A4%87%E5%88%87%E6%8D%A2.png)
 
