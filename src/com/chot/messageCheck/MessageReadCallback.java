@@ -5,8 +5,7 @@ import com.tibco.tibrv.*;
 /**
  * 消息监听
  */
-public interface MessageReadCallback extends TibrvMsgCallback, TibrvTimerCallback,
-        TibrvFtMemberCallback, TibrvFtMonitorCallback {
+public interface MessageReadCallback extends TibrvMsgCallback, TibrvErrorCallback {
     /**
      * 接收消息并处理
      *
@@ -16,31 +15,14 @@ public interface MessageReadCallback extends TibrvMsgCallback, TibrvTimerCallbac
     void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg);
 
     /**
-     * 主备切换
+     * 异常处理
      *
-     * @param member
-     * @param groupName
-     * @param action
+     * @param o
+     * @param i
+     * @param s
+     * @param throwable
      */
     @Override
-    void onFtAction(TibrvFtMember member, String groupName, int action);
+    void onError(Object o, int i, String s, Throwable throwable);
 
-
-    /**
-     * 监听RV挂掉
-     *
-     * @param ftMonitor
-     * @param ftgroupName
-     * @param numActive
-     */
-    @Override
-    void onFtMonitor(TibrvFtMonitor ftMonitor, String ftgroupName, int numActive);
-
-    /**
-     * 计时器
-     *
-     * @param tibrvTimer
-     */
-    @Override
-    void onTimer(TibrvTimer tibrvTimer);
 }

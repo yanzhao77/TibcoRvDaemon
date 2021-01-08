@@ -3,12 +3,7 @@ package com.chot.rvLister;
 import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 import com.tibco.tibrv.*;
 import org.apache.log4j.Logger;
-import sun.plugin2.message.transport.Transport;
 
-import javax.xml.crypto.Data;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -23,6 +18,17 @@ public class TibrvFtService {
     Logger logger;
     static int oldNumActive = 0;
 
+    //需要进行主备切换消息
+    static String[] switchServiceParameter = new String[]{
+            "_RV.INFO.SYSTEM.LISTEN.STOP", //监听停止
+            "_RV.INFO.SYSTEM.UNREACHABLE.TRANSPORT", //消息发送停止
+            "_RV.WARN.SYSTEM.RVD.DISCONNECTED", //服务器daemon断开连接
+//            "_RV.INFO.SYSTEM.LISTEN.START", //未启动这个频道？监听这个频道
+    };
+    static String[] refreshServiceParameterMap = new String[]{//需要刷新链接组信息
+            "_RV.INFO.SYSTEM.RVD.CONNECTED", //服务器daemon重新连接
+            "_RV.WARN.SYSTEM.RVD.DISCONNECTED", //服务器daemon断开连接
+    };
 
     public TibrvFtService(RvListener rvListener, Logger logger) {
         this.rvListener = rvListener;
@@ -38,107 +44,50 @@ public class TibrvFtService {
     }
 
     /**
-     * 保存接收消息的时间
+     * 停止这个监听，启动备用监听
      *
-     * @param tibrvListener
+     * @param tibrvTimerTransport 异常的监听
      */
-    public void setTimerIntervalMessageTime(TibrvListener tibrvListener) throws TibrvException {
-        for (TibrvRvdTransportParameter tibrvTimer : rvListener.getTimerIntervalMessageMap().keySet()) {
-            if (tibrvTimer.getTibrvRvdTransport() == tibrvListener.getTransport()) {
-                //获取当前时间并写入
-                rvListener.setTimerIntervalMessageMap(tibrvTimer, new Date().getTime());
-            }
-        }
-    }
-
-    public void onTimer(TibrvTimer tibrvTimer) throws TibrvException {
-        //每10秒查看一次是否有接收到消息，如果没有，就切换到备用件
-        TibrvRvdTransport tibrvTimerTransport = null;
-        TibrvRvdTransportParameter transportParameter = null;
-        long used = 0;
-        for (TibrvRvdTransportParameter tibrvRvdTransportParameter : rvListener.getTimerIntervalMessageMap().keySet()) {
-            if (tibrvTimer.getClosure() == tibrvRvdTransportParameter.getTibrvRvdTransport()) {
-                transportParameter = tibrvRvdTransportParameter;
-                tibrvTimerTransport = (TibrvRvdTransport) tibrvTimer.getClosure();
-                long messageTime = rvListener.getTimerIntervalMessageMap().get(tibrvRvdTransportParameter);
-                used = (new Date().getTime() - messageTime) / 1000;//获取时间差
-            }
-        }
-        if (used < tibrvTimer.getInterval()) {
-            rvListener.setTimerIntervalMessageMap(transportParameter, new Date().getTime());
-        } else {
-            if (rvListener.getTransport() == tibrvTimerTransport) {
-                //切换监听
-                List<TibrvRvdTransportParameter> transportParameterList = rvListener.getTransportGroup().get(transportParameter.getGroupName());
-                for (TibrvRvdTransportParameter tibrvRvdTransportParameter : transportParameterList) {
-                    if (tibrvRvdTransportParameter != transportParameter) {
-                        TibrvRvdTransport rvdTransport = tibrvRvdTransportParameter.getTibrvRvdTransport();
-                        startListener(rvdTransport, tibrvRvdTransportParameter.getGroupName());
-                        stopListener(rvdTransport, tibrvRvdTransportParameter.getGroupName());
-                        rvListener.setTransport(rvdTransport);
-                        rvListener.setTimerIntervalMessageMap(tibrvRvdTransportParameter, new Date().getTime());
-                    }
+    public void resertTibrvRvdListener(TibrvRvdTransport tibrvTimerTransport) throws TibrvException {
+        TibrvRvdTransportParameter transportParameter = findTibrvRvdTransportByParameter(tibrvTimerTransport);
+        tibrvTimerTransport = transportParameter.getTibrvRvdTransport();
+        //计算有效的可用的备用机数量
+        List<TibrvRvdTransportParameter> transportParameterValidityList = new ArrayList<>();
+        rvListener.getTransportGroup().get(transportParameter.getGroupName()).forEach(transportfe -> {
+            if (transportfe.isValidityFlag()) transportParameterValidityList.add(transportfe);
+        });
+        for (TibrvRvdTransportParameter tibrvRvdTransportParameter : transportParameterValidityList) {
+            if (tibrvRvdTransportParameter != transportParameter &
+                    !tibrvRvdTransportParameter.isStartListener()) {
+                TibrvRvdTransport rvdTransport = null;
+                try {
+                    rvdTransport = tibrvRvdTransportParameter.getTibrvRvdTransport();
+                } catch (TibrvException e) {
+                    transportParameter.setValidityFlag(false);
+                    logger.error("Failed to create TibrvQueue:" + e.getLocalizedMessage(), e.getCause());
                 }
+                logger.debug("TibrvFtMember.ACTIVATE invoked...立即激活" + "\t" + rvdTransport + "\n"
+                        + "*** ACTIVATE: " + Arrays.toString(tibrvRvdTransportParameter.getSubject()));
+                startListener(rvdTransport, tibrvRvdTransportParameter.getGroupName());
+                stopListener(rvdTransport, tibrvRvdTransportParameter.getGroupName());
+                rvListener.setTransport(rvdTransport);
             }
         }
+
+
     }
 
     /**
-     * 活动数量监控
+     * 处理异常
      *
-     * @param member
-     * @param groupName
-     * @param action
+     * @param o
+     * @param i
+     * @param s
+     * @param throwable
      */
-    @Deprecated
-    public void onFtAction(TibrvFtMember member, String groupName, int action) {
-        System.err.println(member);
-//        if (action == TibrvFtMember.PREPARE_TO_ACTIVATE) {
-//            //准备激活
-//            System.err.println("TibrvFtMember.PREPARE_TO_ACTIVATE invoked...准备激活");
-//            System.out.println("*** PREPARE TO ACTIVATE: " + member.getTransport());
-//        } else if (action == TibrvFtMember.ACTIVATE) {
-//            //立即激活
-//            System.err.println("TibrvFtMember.ACTIVATE invoked...立即激活");
-//            System.out.println("*** ACTIVATE: " + groupName);
-//            try {
-//                startListener(member.getTransport(), member.getGroupName());
-//            } catch (TibrvException e) {
-//                logger.error(e.getLocalizedMessage());
-//            }
-//            //立即停用
-//            System.err.println("TibrvFtMember.DEACTIVATE invoked...立即停用");
-//            try {
-//                stopListener(member.getTransport(), member.getGroupName());
-//            } catch (TibrvException e) {
-//                logger.error(e.getLocalizedMessage());
-//            }
-//        } else if (action == TibrvFtMember.DEACTIVATE) {
-//            //立即停用
-//            System.err.println("TibrvFtMember.DEACTIVATE invoked...立即停用");
-////                    System.out.println("*** DEACTIVATE: " + groupName);
-//            try {
-//                stopListener(member.getTransport(), member.getGroupName());
-//            } catch (TibrvException e) {
-//                logger.error(e.getLocalizedMessage());
-//            }
-//        }
-    }
-
-    /**
-     * 监听RV活动状态
-     *
-     * @param ftMonitor
-     * @param groupName
-     * @param numActive
-     */
-    @Deprecated
-    public void onFtMonitor(TibrvFtMonitor ftMonitor, String groupName, int numActive) {
-        //如果有活动成员消息，就进行处理
-        System.out.println(ftMonitor);
-        System.err.println("Group [" + groupName + "]: has " + numActive + " members (after " +
-                ((oldNumActive > numActive) ? "one deactivated" : "one activated") + ").");
-        oldNumActive = numActive;
+    public void onError(Object o, int i, String s, Throwable throwable) {
+        System.err.println("onError" + o + "\t" + i + "\t" + s);
+        logger.error(o + "\t" + i + "\t" + s + "\t" + throwable.getLocalizedMessage());
     }
 
 
@@ -153,13 +102,14 @@ public class TibrvFtService {
         List<TibrvRvdTransportParameter> rvdTransportParameterList = rvListener.getTransportGroup().get(groupName);
         if (rvdTransportParameterList != null) {
             for (TibrvRvdTransportParameter tibrvRvdTransportParameter : rvdTransportParameterList) {
-                if (tibrvRvdTransportParameter.getTibrvRvdTransport() == transport) {
+                if (tibrvRvdTransportParameter.getTibrvRvdTransport() == transport &
+                        tibrvRvdTransportParameter.isValidityFlag()) {
                     for (String subject : tibrvRvdTransportParameter.getSubject()) {
-                        TibrvListener tibrvListener = new TibrvListener(Tibrv.defaultQueue(),
-                                rvListener.getMessageRead(), transport, subject, null);
-                        tibrvRvdTransportParameter.setTibrvListenerMap((TibrvRvdTransport) transport, tibrvListener);
+                        rvListener.setTibrvListener(transport, Tibrv.defaultQueue(), subject, tibrvRvdTransportParameter);
                         System.out.println("Start Listening on: " + subject);
                     }
+                    tibrvRvdTransportParameter.setStartListener(true);
+                    tibrvRvdTransportParameter.setValidityFlag(true);
                 }
             }
         }
@@ -178,17 +128,77 @@ public class TibrvFtService {
             for (TibrvRvdTransportParameter tibrvRvdTransportParameter : rvdTransportParameterList) {
                 if (tibrvRvdTransportParameter.getTibrvRvdTransport() != transport) {
                     for (TibrvRvdTransport tibrvRvdTransport : tibrvRvdTransportParameter.getTibrvListenerMap().keySet()) {
-                        if (tibrvRvdTransport != transport) {
-                            List<TibrvListener> tibrvListeners = tibrvRvdTransportParameter.getTibrvListenerMap().get(tibrvRvdTransport);
-                            tibrvListeners.forEach(tibrvListener -> {
+                        List<TibrvListener> tibrvListeners = tibrvRvdTransportParameter.getTibrvListenerMap().get(tibrvRvdTransport);
+                        tibrvListeners.forEach(tibrvListener -> {
+                            //除异常监听外，全部关闭
+                            if (!tibrvListener.getSubject().equals("_RV.>")) {
                                 tibrvListener.destroy();
                                 System.out.println("Destroy Listener on Subject: " + tibrvListener.getSubject());
-                            });
-                        }
+                            }
+                        });
                     }
+                    tibrvRvdTransportParameter.setStartListener(false);
                 }
             }
         }
     }
 
+
+    public void warnAndErrorCheckForMessage(TibrvListener tibrvListener, TibrvMsg tibrvMsg) throws TibrvException {
+
+        TibrvRvdTransportParameter rvdTransportParameter = findTibrvRvdTransportByParameter((TibrvRvdTransport) tibrvListener.getTransport());
+        TibrvRvdTransport transport = rvdTransportParameter.getTibrvRvdTransport();
+        String subjectName = tibrvMsg.getSendSubject();
+        if (subjectName.contains("_RV.INFO.SYSTEM.HOST.STATUS")) {
+            //检测远程daemon是否正常
+            logger.debug(transport + "\t" + tibrvListener.getSubject() + "\t"
+                    + "\t" + subjectName + "\t" + tibrvMsg.toString());
+            return;
+        }
+        logger.error(transport + "\t" + tibrvListener.getSubject() + "\t"
+                + "\t" + subjectName + "\t" + tibrvMsg.toString());
+        for (String subject : switchServiceParameter) {
+            if (subjectName.contains(subject)) {
+                resertTibrvRvdListener(transport);
+            }
+        }
+        if (rvListener.getTransport() != transport) {
+            if (subjectName.contains("_RV.WARN.SYSTEM.RVD.DISCONNECTED") //服务器daemon断开连接
+            ) {
+                refreshTibrvRvdTransportMap(transport, false);
+            } else if (subjectName.contains("_RV.INFO.SYSTEM.RVD.CONNECTED")) {//服务器daemon重新连接
+                refreshTibrvRvdTransportMap(transport, true);
+            }
+        }
+    }
+
+    /**
+     * 刷新这个组成员
+     *
+     * @param transport
+     * @param validityFlag
+     */
+    void refreshTibrvRvdTransportMap(TibrvRvdTransport transport, boolean validityFlag) {
+        TibrvRvdTransportParameter tibrvRvdTransportByParameter = findTibrvRvdTransportByParameter(transport);
+        tibrvRvdTransportByParameter.setValidityFlag(validityFlag);
+    }
+
+    /**
+     * 查找对应的 TibrvRvdTransportParameter
+     *
+     * @param transport
+     * @return
+     */
+    TibrvRvdTransportParameter findTibrvRvdTransportByParameter(TibrvRvdTransport transport) {
+        for (List<TibrvRvdTransportParameter> rvdTransportParameterList : rvListener.getTransportGroup().values()) {
+            for (TibrvRvdTransportParameter transportParameter : rvdTransportParameterList) {
+                if (transportParameter.getService().equals(transport.getService()) &
+                        transportParameter.getNetwork().equals(transport.getNetwork()) &
+                        transportParameter.getDaemon().equals(transport.getDaemon())) {
+                    return transportParameter;
+                }
+            }
+        }
+        return null;
+    }
 }

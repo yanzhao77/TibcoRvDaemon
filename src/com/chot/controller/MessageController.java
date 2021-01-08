@@ -32,39 +32,28 @@ public class MessageController {
             @Override
             public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
                 //如果有消息传入，则分配一个线程执行消息处理
-                customThreadPoolExecutor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println(tibrvListener.getTransport() + "\t" + tibrvMsg.toString());
-//                        xmlService.xmlCheckForMessage(tibrvMsg.toString(), tibrvListener, tibrvMsg);
+                if (tibrvListener.getSubject().equals("_RV.>")) {
+                    try {
+                        tibrvFtService.warnAndErrorCheckForMessage(tibrvListener, tibrvMsg);
+                    } catch (TibrvException e) {
+                        logger.error(e.getLocalizedMessage());
                     }
-                });
-                try {
-                    tibrvFtService.setTimerIntervalMessageTime(tibrvListener);
-                } catch (TibrvException e) {
-                    logger.error(e.getLocalizedMessage());
+                } else {
+                    customThreadPoolExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println(tibrvListener.getTransport() + "\t" + tibrvListener.getSubject() + "\t"
+                                    + "\t" + tibrvMsg.getSendSubject() + "\t" + tibrvMsg.toString());
+//                        xmlService.xmlCheckForMessage(tibrvMsg.toString(), tibrvListener, tibrvMsg);
+                        }
+                    });
                 }
             }
 
             @Override
-            public void onFtAction(TibrvFtMember member, String groupName, int action) {
-                tibrvFtService.onFtAction(member, groupName, action);
+            public void onError(Object o, int i, String s, Throwable throwable) {
+                tibrvFtService.onError(o, i, s, throwable);
             }
-
-            @Override
-            public void onTimer(TibrvTimer tibrvTimer) {
-                try {
-                    tibrvFtService.onTimer(tibrvTimer);
-                } catch (TibrvException e) {
-                    logger.error(e.getLocalizedMessage());
-                }
-            }
-
-            @Override
-            public void onFtMonitor(TibrvFtMonitor ftMonitor, String ftgroupName, int numActive) {
-                tibrvFtService.onFtMonitor(ftMonitor, ftgroupName, numActive);
-            }
-
         };
     }
 

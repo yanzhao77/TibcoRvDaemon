@@ -32,7 +32,7 @@ public class RVDemoMain {
 
         String service2 = "1000";
         String network2 = ";225.1.1.1";
-        String daemon2 = "10.56.200.238:7500";
+        String daemon2  = "10.56.200.238:7500";
         String subject2 = "DEMO.Demosvr";
 
 

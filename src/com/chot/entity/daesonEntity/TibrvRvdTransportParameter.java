@@ -17,11 +17,15 @@ public class TibrvRvdTransportParameter {
     private double activateInterval = 4.8;//激活间隔
     boolean startInbox = false; //是否开启开启inbox
     private double lostInterval = 4.8;     // 活动成员的心跳间隔时间
+
+    private boolean isStartListener = false;//是否开启监听
+    private boolean validityFlag = true;//是否是可监听
     String service;
     String network;
     String daemon;
-    String description;
+    String description;//说明
     String[] subject;//频道集合
+
     String inbox;
 
     private TibrvRvdTransport tibrvRvdTransport;
@@ -242,4 +246,21 @@ public class TibrvRvdTransportParameter {
         getTibrvListenerMap().get(transport).add(listener);
 
     }
+
+    public boolean isStartListener() {
+        return isStartListener;
+    }
+
+    public void setStartListener(boolean startListener) {
+        isStartListener = startListener;
+    }
+
+    public boolean isValidityFlag() {
+        return validityFlag;
+    }
+
+    public void setValidityFlag(boolean validityFlag) {
+        this.validityFlag = validityFlag;
+    }
+
 }

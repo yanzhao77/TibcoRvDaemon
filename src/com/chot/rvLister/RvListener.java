@@ -6,17 +6,13 @@ import com.chot.utils.LoggerUtil;
 import com.tibco.tibrv.*;
 import org.apache.log4j.Logger;
 
-import java.sql.Time;
-import java.time.Instant;
 import java.util.*;
 
 public class RvListener {
     MessageReadCallback messageRead;//统一的消息处理
     Logger logger;
     Map<String, List<TibrvRvdTransportParameter>> transportGroup;//多个server
-    Map<TibrvRvdTransportParameter, Long> timerIntervalMessageMap;//如果这个timr在指定时间内没有收到消息，那么就切换监听，
     TibrvTransport transport;//当前正在运行的transport,(主备切换)
-    public long stoptime = 60;//如果一分钟之内，主备机组都启动不了，就退出程序
 
     public RvListener() {
         logger = LoggerUtil.getLogger();
@@ -43,23 +39,14 @@ public class RvListener {
                 }
 
                 @Override
-                public void onFtAction(TibrvFtMember member, String groupName, int action) {
-                    RvListener.this.onFtAction(member, groupName, action);
-                }
-
-                @Override
-                public void onFtMonitor(TibrvFtMonitor ftMonitor, String ftgroupName, int numActive) {
-                    RvListener.this.onFtMonitor(ftMonitor, ftgroupName, numActive);
-                }
-
-                @Override
-                public void onTimer(TibrvTimer tibrvTimer) {
-                    RvListener.this.onTimer(tibrvTimer);
+                public void onError(Object o, int i, String s, Throwable throwable) {
+                    {
+                        RvListener.this.onError(o, i, s, throwable);
+                    }
                 }
             };
         }
         boolean isStartTransport = false;//判断是否启动成功
-        boolean isFirstFlag = true;//判断是否是首次启动
         for (String key : transportGroup.keySet()) {
             isStartTransport = false;
             List<TibrvRvdTransportParameter> transportParameterList = new ArrayList<>();
@@ -69,43 +56,12 @@ public class RvListener {
                 // Create RVD transport
                 TibrvTransport transport = null;
                 try {
+                    Tibrv.setErrorCallback(messageRead);
                     transport = transportParameter.getTibrvRvdTransport();
-                    //启动一个定时器监听是否消息继续传输,设定5秒
-                    try {
-                        TibrvTimer fttimer = new TibrvTimer(Tibrv.defaultQueue(), messageRead, 5.0, transport);
-                        getTimerIntervalMessageMap().put(transportParameter, new Date().getTime());
-                    } catch (TibrvException e) {
-                        logger.error("Failed to create timer:" + e.getLocalizedMessage());
-                        System.exit(0);
-                    }
-
-                    if (!key.equals("default")) {
-                        new TibrvFtMonitor(Tibrv.defaultQueue(), // TibrvQueue
-                                messageRead,                 // TibrvFtMemberCallback
-                                transportParameter.getTibrvRvdTransport(),          // TibrvTransport
-                                transportParameter.getGroupName(),
-                                transportParameter.getLostInterval(), null);
-                        if (!isFirstFlag) {
-                            new TibrvFtMember(Tibrv.defaultQueue(), // TibrvQueue
-                                    messageRead,                 // TibrvFtMemberCallback
-                                    transportParameter.getTibrvRvdTransport(),          // TibrvTransport
-                                    transportParameter.getGroupName(),          // groupName 组名称
-                                    transportParameter.getFtWeight(),             // 权重
-                                    transportParameter.getActiveGoalNum(),        // activeGoal
-                                    transportParameter.getHbInterval(),           // 心跳时间间隔
-                                    transportParameter.getPrepareInterval(),      // 准备时间间隔,
-                                    // Zero is a special value,零是一个特殊值
-                                    // indicating that the member does 指示成员不需要预先警告即可激活
-                                    transportParameter.getActivateInterval(),     // activationInterval 激活间隔
-                                    null);
-                        }
-                    }
                     if (!key.equals("default") & isStartTransport) {
                         continue;
                     }
-                    System.err.println("service\t" + transportParameter.getService() + "\tnetwork\t"
-                            + transportParameter.getNetwork()
-                            + "\tdaemon\t" + transportParameter.getDaemon() + "\t启动成功");
+                    transportParameter.setValidityFlag(true);
                     logger.debug("service\t" + transportParameter.getService() + "\tnetwork\t"
                             + transportParameter.getNetwork()
                             + "\tdaemon\t" + transportParameter.getDaemon() + "\t启动成功");
@@ -116,12 +72,11 @@ public class RvListener {
                             "\tDaemon:" + transportParameter.getDaemon() +
                             "\t" + "is not connect" + e.getLocalizedMessage(), e.getCause());
                     //如果这个备份机不可用，就启动其他的，
+                    transportParameter.setValidityFlag(false);
                     isStartTransport = false;
                     continue;//启用备用机组
                 }
                 isStartTransport = transport.isValid();//确认rv机组是否打开
-                isFirstFlag = false;
-
 
                 // Create a response queue
                 try {
@@ -146,6 +101,7 @@ public class RvListener {
                                 + e.getLocalizedMessage(), e.getCause());
                         System.exit(0);
                     }
+                    transportParameter.setStartListener(true);
 
                     // Create a message for the query.服务器上注册
                     TibrvMsg query_msg = new TibrvMsg();
@@ -164,20 +120,12 @@ public class RvListener {
                     // Create listeners for specified subjects
                     for (String subjectName : transportParameter.getSubject()) {
                         // create listener using default queue
-                        try {
-                            TibrvListener tibrvListener = new TibrvListener(tibrvQueue, messageRead, transport,
-                                    subjectName, null);
-                            transportParameter.setTibrvListenerMap((TibrvRvdTransport) transport, tibrvListener);
-                            logger.info("Listening on: " + subjectName);
-                        } catch (TibrvException e) {
-                            logger.error("Failed to create listener:\t" + subjectName
-                                    + e.getLocalizedMessage(), e.getCause());
-                            System.exit(0);
-
-                        }
+                        setTibrvListener(transport, tibrvQueue, subjectName, transportParameter);
                     }
+                    transportParameter.setStartListener(true);
                 }
                 this.transport = transport;
+                setWarnAndErrorSubject(transport, tibrvQueue, transportParameter);
             }
         }
 
@@ -193,7 +141,48 @@ public class RvListener {
                 System.exit(0);
             }
         }
+    }
 
+    /**
+     * 创建监听
+     *
+     * @param transport
+     * @param tibrvQueue
+     * @param subjectName
+     * @param transportParameter
+     */
+    public void setTibrvListener(TibrvTransport transport, TibrvQueue tibrvQueue, String subjectName,
+                                 TibrvRvdTransportParameter transportParameter) {
+        try {
+            TibrvListener tibrvListener = new TibrvListener(tibrvQueue, messageRead, transport,
+                    subjectName, null);
+            transportParameter.setTibrvListenerMap((TibrvRvdTransport) transport, tibrvListener);
+            logger.info("Listening on: " + subjectName);
+        } catch (TibrvException e) {
+            logger.error("Failed to create listener:\t" + subjectName
+                    + e.getLocalizedMessage(), e.getCause());
+            System.exit(0);
+
+        }
+    }
+
+    /**
+     * 添加错误频道监听
+     *
+     * @param transport
+     * @param tibrvQueue
+     * @param transportParameter
+     */
+    public void setWarnAndErrorSubject(TibrvTransport transport, TibrvQueue tibrvQueue, TibrvRvdTransportParameter
+            transportParameter) {
+//        String warnSubject = "_RV.WARN.SYSTEM.CLIENT.DEFUNCT";
+//        String errorSubject = "_RV.ERROR.SYSTEM.CLIENT.DEFUNCT";
+//        String[] subjectArr = new String[]{"_RV.ERROR.>", "_RV.WARN.>"};
+//        for (String subject : subjectArr) {
+//            setTibrvListener(transport, tibrvQueue, subject, transportParameter);
+//        }
+
+        setTibrvListener(transport, tibrvQueue, "_RV.>", transportParameter);
     }
 
 
@@ -225,6 +214,11 @@ public class RvListener {
         System.out.println("RV挂掉");
     }
 
+    private void onError(Object o, int i, String s, Throwable throwable) {
+        System.out.println(o + "\t" + i + "\t" + s);
+        logger.error(throwable.getLocalizedMessage());
+    }
+
     /**
      * 创建实例化的tTibrvRvdTransport数组
      *
@@ -233,7 +227,8 @@ public class RvListener {
      * @param daemon
      * @param subject
      */
-    public TibrvRvdTransportParameter setTransportParameter(String groupName, String messageName, String service, String network,
+    public TibrvRvdTransportParameter setTransportParameter(String groupName, String messageName, String
+            service, String network,
                                                             String daemon, boolean isStartInbox, String... subject) {
         TibrvRvdTransportParameter parameter = new TibrvRvdTransportParameter(messageName, service, network, daemon, subject);
         Map<String, List<TibrvRvdTransportParameter>> listMap = getTransportGroup();
@@ -308,7 +303,8 @@ public class RvListener {
      * @param messageName
      * @param subject
      */
-    public void setTransportParameterGroup(Map<String, List<String[]>> transportGroup, String messageName, boolean isStartInbox, String... subject) {
+    public void setTransportParameterGroup(Map<String, List<String[]>> transportGroup, String messageName,
+                                           boolean isStartInbox, String... subject) {
         for (String key : transportGroup.keySet()) {
             List<String[]> transportParameterList = transportGroup.get(key);
             for (String[] parameterArr : transportParameterList) {
@@ -352,17 +348,6 @@ public class RvListener {
             transportGroup = new HashMap<>();
         }
         return transportGroup;
-    }
-
-    public Map<TibrvRvdTransportParameter, Long> getTimerIntervalMessageMap() {
-        if (timerIntervalMessageMap == null) {
-            timerIntervalMessageMap = new HashMap<>();
-        }
-        return timerIntervalMessageMap;
-    }
-
-    public void setTimerIntervalMessageMap(TibrvRvdTransportParameter timer, long messageTime) {
-        getTimerIntervalMessageMap().put(timer, messageTime);
     }
 
     public TibrvTransport getTransport() {

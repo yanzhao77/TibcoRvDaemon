@@ -59,7 +59,7 @@ public class CustomThreadPoolExecutor {
                 System.gc();
                 System.err.println("System.gc");
             }
-        }, 0, 50 * 1000);//每18分钟执行一次垃圾回收
+        }, 0, 50 * 10000);//每18分钟执行一次垃圾回收
     }
 
     /**
@@ -78,7 +78,6 @@ public class CustomThreadPoolExecutor {
         System.out.println("核心线程数：" + pool.getCorePoolSize());
         System.out.println("当前执行线程数：" + pool.getActiveCount());
         System.out.println("剩余线程数：" + (pool.getMaximumPoolSize() - pool.getActiveCount()));
-//        System.err.println("当前worker数：" + pool.getQueue().size());
     }
 
     /**

@@ -47,21 +47,21 @@ public class XMLService {
     public void println(Object messageValue, TibrvMsg message) {
         Thread thread = Thread.currentThread();
         logger.info("线程ID：" + thread.getId() + "\t线程名称：" + thread.getName());
-        System.err.println(message.getSendSubject() + "\t" + messageValue.getClass().getSimpleName());
+        System.out.println(message.getSendSubject() + "\t" + messageValue.getClass().getSimpleName());
         if (messageValue instanceof GetOicMainLotList) {
             GetOicMainLotList messageEntity = (GetOicMainLotList) messageValue;
 
-            System.err.println(messageEntity.getBody().getFactoryName());
-            System.err.println(messageEntity.getBody().getMachineName());
-            System.err.println(messageEntity.getBody().getEventUser());
-            System.err.println(messageEntity.getBody().getSoftwareVersion());
-            System.err.println(messageEntity.getBody()
+            System.out.println(messageEntity.getBody().getFactoryName());
+            System.out.println(messageEntity.getBody().getMachineName());
+            System.out.println(messageEntity.getBody().getEventUser());
+            System.out.println(messageEntity.getBody().getSoftwareVersion());
+            System.out.println(messageEntity.getBody()
                     .getTransactionStartTime());
-            System.err.println();
+            System.out.println();
         } else if (messageValue instanceof CheckRecipeParameterRequest) {
             CheckRecipeParameterRequest checkMessage = (CheckRecipeParameterRequest) messageValue;
-            System.err.println(checkMessage.getHeader().getMessageName());
-            System.err.println(checkMessage.getBody().getLineName());
+            System.out.println(checkMessage.getHeader().getMessageName());
+            System.out.println(checkMessage.getBody().getLineName());
         }
     }
 
