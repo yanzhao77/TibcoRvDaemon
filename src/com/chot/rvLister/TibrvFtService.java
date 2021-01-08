@@ -144,6 +144,13 @@ public class TibrvFtService {
     }
 
 
+    /**
+     * 处理异常消息
+     *
+     * @param tibrvListener
+     * @param tibrvMsg
+     * @throws TibrvException
+     */
     public void warnAndErrorCheckForMessage(TibrvListener tibrvListener, TibrvMsg tibrvMsg) throws TibrvException {
 
         TibrvRvdTransportParameter rvdTransportParameter = findTibrvRvdTransportByParameter((TibrvRvdTransport) tibrvListener.getTransport());
@@ -154,21 +161,15 @@ public class TibrvFtService {
             logger.debug(transport + "\t" + tibrvListener.getSubject() + "\t"
                     + "\t" + subjectName + "\t" + tibrvMsg.toString());
             return;
-        }
-        logger.error(transport + "\t" + tibrvListener.getSubject() + "\t"
-                + "\t" + subjectName + "\t" + tibrvMsg.toString());
-        for (String subject : switchServiceParameter) {
-            if (subjectName.contains(subject)) {
-                resertTibrvRvdListener(transport);
-            }
-        }
-        if (rvListener.getTransport() != transport) {
-            if (subjectName.contains("_RV.WARN.SYSTEM.RVD.DISCONNECTED") //服务器daemon断开连接
-            ) {
+        } else if (subjectName.contains("_RV.INFO.SYSTEM.RVD.CONNECTED")) {//服务器daemon重新连接
+            refreshTibrvRvdTransportMap(transport, true);
+        } else {
+            logger.error(transport + "\t" + tibrvListener.getSubject() + "\t"
+                    + "\t" + subjectName + "\t" + tibrvMsg.toString());
+            if (subjectName.contains("_RV.WARN.SYSTEM.RVD.DISCONNECTED")) {//服务器daemon断开连接
                 refreshTibrvRvdTransportMap(transport, false);
-            } else if (subjectName.contains("_RV.INFO.SYSTEM.RVD.CONNECTED")) {//服务器daemon重新连接
-                refreshTibrvRvdTransportMap(transport, true);
             }
+            resertTibrvRvdListener(transport);
         }
     }
 

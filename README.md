@@ -47,3 +47,10 @@ inbox监听是在指定RV的service，network，deason后，指定点对点的�
 将消息进行筛选后，使用Xstram 将类转换为对象，并输出
 
 ![inbox创建与监听](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.png)
+
+
+
+#### 监听系统通知主备切换
+
+主备切换即是在主机收不到消息或者主机关闭时，能够切换到备用机上继续监听消息，实现服务的连续性。实现主备切换的重点在于对于rv的守护进程（daemon）的监听，在daemon发送错误信息时，根据信息情况，自动切换到备用机上
+
