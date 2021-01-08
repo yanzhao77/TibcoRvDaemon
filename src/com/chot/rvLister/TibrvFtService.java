@@ -14,7 +14,7 @@ import java.util.*;
  * @Created by yan34177
  */
 public class TibrvFtService {
-    RvListener rvListener;
+    RvListener rvListener;//监听的类
     Logger logger;
     static int oldNumActive = 0;
 
@@ -152,16 +152,18 @@ public class TibrvFtService {
      * @throws TibrvException
      */
     public void warnAndErrorCheckForMessage(TibrvListener tibrvListener, TibrvMsg tibrvMsg) throws TibrvException {
-
         TibrvRvdTransportParameter rvdTransportParameter = findTibrvRvdTransportByParameter((TibrvRvdTransport) tibrvListener.getTransport());
         TibrvRvdTransport transport = rvdTransportParameter.getTibrvRvdTransport();
         String subjectName = tibrvMsg.getSendSubject();
         if (subjectName.contains("_RV.INFO.SYSTEM.HOST.STATUS")) {
-            //检测远程daemon是否正常
+            //检测远程daemon是否正常,
             logger.debug(transport + "\t" + tibrvListener.getSubject() + "\t"
                     + "\t" + subjectName + "\t" + tibrvMsg.toString());
             return;
-        } else if (subjectName.contains("_RV.INFO.SYSTEM.RVD.CONNECTED")) {//服务器daemon重新连接
+        }
+
+        //异常处理
+        if (subjectName.contains("_RV.INFO.SYSTEM.RVD.CONNECTED")) {//服务器daemon重新连接
             refreshTibrvRvdTransportMap(transport, true);
         } else {
             logger.error(transport + "\t" + tibrvListener.getSubject() + "\t"
@@ -174,7 +176,7 @@ public class TibrvFtService {
     }
 
     /**
-     * 刷新这个组成员
+     * 刷新这个组成员是否可用的状态
      *
      * @param transport
      * @param validityFlag

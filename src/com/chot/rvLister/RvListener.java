@@ -11,6 +11,7 @@ import java.util.*;
 public class RvListener {
     MessageReadCallback messageRead;//统一的消息处理
     Logger logger;
+    //如果这里是启动多个service，就是默认的groupKey，如果是主备机制，就是设置的groupName
     Map<String, List<TibrvRvdTransportParameter>> transportGroup;//多个server
     TibrvTransport transport;//当前正在运行的transport,(主备切换)
 
@@ -18,7 +19,7 @@ public class RvListener {
         logger = LoggerUtil.getLogger();
         // open Tibrv in native implementation
         try {
-            Tibrv.open(Tibrv.IMPL_NATIVE);
+            Tibrv.open(Tibrv.IMPL_NATIVE);//打开本机上的rv进程
         } catch (TibrvException e) {
             logger.error("Failed to open Tibrv in native implementation:" + e.getLocalizedMessage(), e.getCause());
             System.exit(0);
@@ -30,7 +31,7 @@ public class RvListener {
      * 启动监听
      */
     public void start() {
-        TibrvQueue tibrvQueue = Tibrv.defaultQueue();
+        TibrvQueue tibrvQueue = Tibrv.defaultQueue();//获取一个默认的队列
         if (messageRead == null) {
             messageRead = new MessageReadCallback() {
                 @Override
@@ -59,9 +60,9 @@ public class RvListener {
                     Tibrv.setErrorCallback(messageRead);
                     transport = transportParameter.getTibrvRvdTransport();
                     if (!key.equals("default") & isStartTransport) {
-                        continue;
+                        continue;//如果是多个service启动，则全部启动；如果主机已经启动成功，就跳出，如果没启动，就继续启动备用机
                     }
-                    transportParameter.setValidityFlag(true);
+                    transportParameter.setValidityFlag(true);//设置该service可用
                     logger.debug("service\t" + transportParameter.getService() + "\tnetwork\t"
                             + transportParameter.getNetwork()
                             + "\tdaemon\t" + transportParameter.getDaemon() + "\t启动成功");
@@ -85,6 +86,8 @@ public class RvListener {
                     logger.error("Failed to create TibrvQueue:" + e.getLocalizedMessage(), e.getCause());
                     System.exit(0);
                 }
+
+                //获取主监听参数，如果这里是单对单监听，就只取出一个
                 String query_subjectName = transportParameter.getQuerySubjectName();
                 String inbox_subjectName = null;
                 if (transportParameter.isStartInbox()) {
@@ -108,7 +111,7 @@ public class RvListener {
                     try {
                         query_msg.setSendSubject(query_subjectName);
                         query_msg.setReplySubject(inbox_subjectName);
-                        transport.send(query_msg);
+                        transport.send(query_msg);//向服务器确认子机链接
                         logger.debug("start TibrvListener\t" + query_subjectName);
                     } catch (TibrvException e) {
                         logger.error("Failed to set send subject:\t" + query_subjectName
@@ -117,14 +120,16 @@ public class RvListener {
                     }
 
                 } else {
+                    //启动所有的监听频道
                     // Create listeners for specified subjects
                     for (String subjectName : transportParameter.getSubject()) {
                         // create listener using default queue
                         setTibrvListener(transport, tibrvQueue, subjectName, transportParameter);
                     }
-                    transportParameter.setStartListener(true);
+                    transportParameter.setStartListener(true);//确认打开监听
                 }
                 this.transport = transport;
+                //启动RV系统异常频道监听
                 setWarnAndErrorSubject(transport, tibrvQueue, transportParameter);
             }
         }
@@ -175,13 +180,10 @@ public class RvListener {
      */
     public void setWarnAndErrorSubject(TibrvTransport transport, TibrvQueue tibrvQueue, TibrvRvdTransportParameter
             transportParameter) {
-//        String warnSubject = "_RV.WARN.SYSTEM.CLIENT.DEFUNCT";
-//        String errorSubject = "_RV.ERROR.SYSTEM.CLIENT.DEFUNCT";
 //        String[] subjectArr = new String[]{"_RV.ERROR.>", "_RV.WARN.>"};
 //        for (String subject : subjectArr) {
 //            setTibrvListener(transport, tibrvQueue, subject, transportParameter);
 //        }
-
         setTibrvListener(transport, tibrvQueue, "_RV.>", transportParameter);
     }
 
@@ -214,6 +216,14 @@ public class RvListener {
         System.out.println("RV挂掉");
     }
 
+    /**
+     * 异常监听
+     *
+     * @param o
+     * @param i
+     * @param s
+     * @param throwable
+     */
     private void onError(Object o, int i, String s, Throwable throwable) {
         System.out.println(o + "\t" + i + "\t" + s);
         logger.error(throwable.getLocalizedMessage());
@@ -228,8 +238,7 @@ public class RvListener {
      * @param subject
      */
     public TibrvRvdTransportParameter setTransportParameter(String groupName, String messageName, String
-            service, String network,
-                                                            String daemon, boolean isStartInbox, String... subject) {
+            service, String network, String daemon, boolean isStartInbox, String... subject) {
         TibrvRvdTransportParameter parameter = new TibrvRvdTransportParameter(messageName, service, network, daemon, subject);
         Map<String, List<TibrvRvdTransportParameter>> listMap = getTransportGroup();
 

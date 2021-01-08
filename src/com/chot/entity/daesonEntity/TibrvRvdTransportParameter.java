@@ -20,13 +20,13 @@ public class TibrvRvdTransportParameter {
 
     private boolean isStartListener = false;//是否开启监听
     private boolean validityFlag = true;//是否是可监听
-    String service;
-    String network;
-    String daemon;
+    String service;//服务端口，发布和订阅需要采用一个端口
+    String network;//网络服务地址
+    String daemon;//守护进程的地址
     String description;//说明
-    String[] subject;//频道集合
+    String[] subject;//订阅频道集合
 
-    String inbox;
+    String inbox;//唯一标识ID
 
     private TibrvRvdTransport tibrvRvdTransport;
     private Map<TibrvRvdTransport, List<TibrvListener>> tibrvListenerMap;

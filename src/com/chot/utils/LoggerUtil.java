@@ -28,13 +28,6 @@ public class LoggerUtil {
     }
 
     public void loggerInit() {
-//        Path configrationPath = Paths.get("cfg", "log4j.properties");
-//        if (!Files.exists(configrationPath) || !Files.isRegularFile(configrationPath)) {
-//            return;
-//
-//        }
-//        System.setProperty("log4j.defaultInitOverride", "1");
-//        PropertyConfigurator.configure(configrationPath.toString());
         String resource = System.getProperty("user.dir") + "/resources/" + "log4j.properties";
         PropertyConfigurator.configure(resource);
         logger = Logger.getLogger(XmlForObjectServiceImpl.class.getName());

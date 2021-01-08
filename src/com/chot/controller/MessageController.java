@@ -31,7 +31,7 @@ public class MessageController {
         messageRead = new MessageReadCallback() {
             @Override
             public void onMsg(TibrvListener tibrvListener, TibrvMsg tibrvMsg) {
-                //如果有消息传入，则分配一个线程执行消息处理
+                //异常消息处理
                 if (tibrvListener.getSubject().equals("_RV.>")) {
                     try {
                         tibrvFtService.warnAndErrorCheckForMessage(tibrvListener, tibrvMsg);
@@ -39,6 +39,7 @@ public class MessageController {
                         logger.error(e.getLocalizedMessage());
                     }
                 } else {
+                    //如果有消息传入，则分配一个线程执行消息处理
                     customThreadPoolExecutor.execute(new Runnable() {
                         @Override
                         public void run() {
