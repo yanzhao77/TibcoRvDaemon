@@ -1,14 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aac080ad-b5c8-4469-8e30-aad85b4b8665" name="Default Changelist" comment="" />
+    <list default="true" id="aac080ad-b5c8-4469-8e30-aad85b4b8665" name="Default Changelist" comment="修改注释">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/chot/test/rvTest/RvSend.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/chot/test/rvTest/tibrvlisten.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/META-INF/rvDemo.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/RVDemoMain.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$Body.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$CimoffUnit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$Header$ReturnMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$Header.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$LineRecipe.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$Parameter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$TimeOutUnit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest$Unit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/CheckecipeParameterRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/GetOicMainLotList$Body.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/GetOicMainLotList$Header$ReturnMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/GetOicMainLotList$Header.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/GetOicMainLotList$List.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/GetOicMainLotList$Lot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/GetOicMainLotList$Result.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/entity/GetOicMainLotList.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/messageCheck/MessageRead.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/messageCheck/XmlReadForCheck$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/messageCheck/XmlReadForCheck.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/rvLister/RvSend.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/rvLister/Rvlistener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/utils/ParseXML.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/rvDemo/com/chot/utils/XStreamUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chot/entity/daesonEntity/TibrvRvdTransportParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chot/entity/daesonEntity/TibrvRvdTransportParameter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chot/test/sendAndListener/RvListenerDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chot/test/sendAndListener/RvListenerDemo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chot/test/sendAndListener/RvSend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chot/test/sendAndListener/RvSend.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chot/utils/ParseXML.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chot/utils/ParseXML.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chot/utils/XStreamUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chot/utils/XStreamUtil.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="rvDemo" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Tag Library Descriptor" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\eclipseDownload\rvDemo\.idea" />
+      </set>
+    </option>
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -24,23 +97,46 @@
     </option>
   </component>
   <component name="ProjectId" id="1l86w6mMb3Os7m4sry9hMgttqVU" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="oracle" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="F:/chgdDownloads/FABServer" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="experimental" />
+    <property name="project.structure.proportion" value="0.15378152" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="vcs.Subversion" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\eclipseDownload\rvDemo\resources\picture" />
+      <recent name="D:\eclipseDownload\rvDemo\resources" />
+      <recent name="D:\eclipseDownload\rvDemo" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.chot.test.rvTest" />
+      <recent name="com.chot.test.rvfault" />
+      <recent name="com.chot.test.sendAndListener" />
+      <recent name="com.chot.rvLister" />
+      <recent name="com.chot.test.demo" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\eclipseDownload\rvDemo\resources\picture" />
+      <recent name="D:\eclipseDownload\rvDemo\lib" />
+      <recent name="D:\eclipseDownload\rvDemo\resources" />
+      <recent name="D:\eclipseDownload\rvDemo\src\com\chot\test\backUp" />
+      <recent name="D:\eclipseDownload\rvDemo\src\com\chot\test\demo3" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.RVDemoMain">
     <configuration name="RVDemoMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.chot.RVDemoMain" />
       <module name="rvDemo" />
@@ -54,9 +150,66 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RvListenerDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.chot.test.sendAndListener.RvListenerDemo" />
+      <module name="rvDemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.chot.test.sendAndListener.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RvSend (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.chot.test.rvTest.RvSend" />
+      <module name="rvDemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.chot.test.rvTest.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RvSend" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.chot.test.sendAndListener.RvSend" />
+      <module name="rvDemo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.chot.test.sendAndListener.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Rvlistener" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Rvlistener" />
+      <module name="rvDemo" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.RvListenerDemo" />
+      <item itemvalue="Application.RvSend" />
+      <item itemvalue="Application.RvSend (1)" />
+      <item itemvalue="Application.Rvlistener" />
+      <item itemvalue="Application.RVDemoMain" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.RVDemoMain" />
+        <item itemvalue="Application.Rvlistener" />
+        <item itemvalue="Application.RvSend (1)" />
+        <item itemvalue="Application.RvSend" />
+        <item itemvalue="Application.RvListenerDemo" />
       </list>
     </recent_temporary>
   </component>
@@ -73,7 +226,7 @@
     </option>
   </component>
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>C:\Users\yan34177\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -82,61 +235,460 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1606966607785</updated>
-      <workItem from="1606966615314" duration="54000" />
+      <workItem from="1606966615314" duration="1763000" />
+      <workItem from="1607503075485" duration="1757000" />
+      <workItem from="1607510249037" duration="3204000" />
+      <workItem from="1607523902713" duration="1180000" />
+      <workItem from="1607561590114" duration="10300000" />
+      <workItem from="1607571975976" duration="17581000" />
+      <workItem from="1607655155052" duration="2961000" />
+      <workItem from="1607668775545" duration="1066000" />
+      <workItem from="1607913314003" duration="1816000" />
+      <workItem from="1607935489678" duration="4822000" />
+      <workItem from="1607991652959" duration="14536000" />
+      <workItem from="1608022952202" duration="2720000" />
+      <workItem from="1608097764018" duration="1719000" />
+      <workItem from="1608182165774" duration="751000" />
+      <workItem from="1608190392439" duration="145000" />
+      <workItem from="1608255014302" duration="1652000" />
+      <workItem from="1608260214002" duration="8183000" />
+      <workItem from="1608273493248" duration="1357000" />
+      <workItem from="1608277199083" duration="314000" />
+      <workItem from="1608278405620" duration="1161000" />
+      <workItem from="1608279843601" duration="2635000" />
+      <workItem from="1608516741769" duration="610000" />
+      <workItem from="1608519531630" duration="107000" />
+      <workItem from="1608597209232" duration="3426000" />
+      <workItem from="1608701342028" duration="3152000" />
+      <workItem from="1608797119338" duration="5887000" />
+      <workItem from="1608879427952" duration="9622000" />
+      <workItem from="1609139257042" duration="11468000" />
+      <workItem from="1609221045700" duration="16709000" />
+      <workItem from="1609290251587" duration="6313000" />
+      <workItem from="1609296627736" duration="377000" />
+      <workItem from="1609297124901" duration="215000" />
+      <workItem from="1609298017804" duration="784000" />
+      <workItem from="1609298948715" duration="2947000" />
+      <workItem from="1609307174459" duration="994000" />
+      <workItem from="1609319698595" duration="2589000" />
+      <workItem from="1609375089752" duration="17420000" />
+      <workItem from="1609751419919" duration="1745000" />
+      <workItem from="1609755145773" duration="28000" />
+      <workItem from="1609828671951" duration="1659000" />
+      <workItem from="1609918248578" duration="735000" />
+      <workItem from="1609919636830" duration="6409000" />
+      <workItem from="1609980476531" duration="21431000" />
+      <workItem from="1610009033848" duration="4370000" />
+      <workItem from="1610065583674" duration="6400000" />
+      <workItem from="1610072449116" duration="1418000" />
+      <workItem from="1610074225980" duration="429000" />
+      <workItem from="1610074904786" duration="11257000" />
+      <workItem from="1610090277913" duration="218000" />
+      <workItem from="1610090514330" duration="2115000" />
+      <workItem from="1610093000032" duration="2892000" />
+      <workItem from="1610172860250" duration="1793000" />
+      <workItem from="1610507974030" duration="2120000" />
+      <workItem from="1611054460509" duration="1541000" />
+      <workItem from="1611193705439" duration="19000" />
+      <workItem from="1612774399742" duration="726000" />
+      <workItem from="1612834238591" duration="124000" />
+      <workItem from="1615344912484" duration="174000" />
+      <workItem from="1615558210381" duration="46000" />
+      <workItem from="1616151722402" duration="2861000" />
+      <workItem from="1617001960236" duration="1967000" />
     </task>
+    <task id="LOCAL-00001" summary="上传rv测试监听并转换为类对象">
+      <created>1606967067755</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1606967067755</updated>
+    </task>
+    <task id="LOCAL-00002" summary="添加线程池启动，将监听到的xml信息处理放在线程中执行">
+      <created>1608702245947</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1608702245947</updated>
+    </task>
+    <task id="LOCAL-00003" summary="添加实体类映射，添加多个实体启动监听不同的server，修改线程池启动时间，只在业务代码区域使用，添加启动时主备切换">
+      <created>1609150326362</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1609150326362</updated>
+    </task>
+    <task id="LOCAL-00004" summary="修改主备启动机制,修改检测参数的传递，添加xpp3驱动jar包">
+      <created>1609232019159</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1609232019159</updated>
+    </task>
+    <task id="LOCAL-00005" summary="修改目录架构和注释部分,修改文件名称，添加service接口">
+      <created>1609233877315</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1609233877315</updated>
+    </task>
+    <task id="LOCAL-00006" summary="添加log记录">
+      <created>1609238728017</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1609238728017</updated>
+    </task>
+    <task id="LOCAL-00007" summary="添加log记录，添加日志打印输出功能，">
+      <created>1609296897283</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1609296897283</updated>
+    </task>
+    <task id="LOCAL-00008" summary="修改工厂类实现">
+      <created>1609306916509</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1609306916509</updated>
+    </task>
+    <task id="LOCAL-00009" summary="修改结构，">
+      <created>1609322289183</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1609322289183</updated>
+    </task>
+    <task id="LOCAL-00010" summary="删除无效引用，">
+      <created>1609380183875</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1609380183875</updated>
+    </task>
+    <task id="LOCAL-00011" summary="修改inbox监听机制，取消servermsg">
+      <created>1609385952802</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1609385952802</updated>
+    </task>
+    <task id="LOCAL-00012" summary="修改inbox客户端注册服务">
+      <created>1609393712976</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1609393712976</updated>
+    </task>
+    <task id="LOCAL-00013" summary="修改名称显示">
+      <created>1609395028115</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1609395028115</updated>
+    </task>
+    <task id="LOCAL-00014" summary="添加测试类">
+      <created>1609395105582</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1609395105582</updated>
+    </task>
+    <task id="LOCAL-00015" summary="修改启动项和实体类结构，添加图片">
+      <created>1609751960503</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1609751960503</updated>
+    </task>
+    <task id="LOCAL-00016" summary="修改MD">
+      <created>1609753020382</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1609753020382</updated>
+    </task>
+    <task id="LOCAL-00017" summary="添加主备切换机制，待完善">
+      <created>1609983572963</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1609983572963</updated>
+    </task>
+    <task id="LOCAL-00018" summary="添加运行过程中主备切换，使用timer每5秒监听一次收到的消息，如果没有消息就切换到备用机">
+      <created>1610005158401</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1610005158401</updated>
+    </task>
+    <task id="LOCAL-00019" summary="修改主备机制，添加监听RV异常的程序广播信号，并在异常时切换监听">
+      <created>1610090036828</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1610090036828</updated>
+    </task>
+    <task id="LOCAL-00020" summary="修改主备切换机制，除需要刷新的异常外，其余全部启动主备切换">
+      <created>1610093084639</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1610093084639</updated>
+    </task>
+    <task id="LOCAL-00021" summary="修改注释，修改说明文件">
+      <created>1610094399060</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1610094399060</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="上传rv测试监听并转换为类对象" />
+    <MESSAGE value="添加线程池启动，将监听到的xml信息处理放在线程中执行" />
+    <MESSAGE value="添加实体类映射，添加多个实体启动监听不同的server，修改线程池启动时间，只在业务代码区域使用，添加启动时主备切换" />
+    <MESSAGE value="修改主备启动机制,修改检测参数的传递，添加xpp3驱动jar包" />
+    <MESSAGE value="修改目录架构和注释部分,修改文件名称，添加service接口" />
+    <MESSAGE value="添加log记录" />
+    <MESSAGE value="添加log记录，添加日志打印输出功能，" />
+    <MESSAGE value="修改工厂类实现" />
+    <MESSAGE value="修改结构，" />
+    <MESSAGE value="删除无效引用，" />
+    <MESSAGE value="修改inbox监听机制，取消servermsg" />
+    <MESSAGE value="修改inbox客户端注册服务" />
+    <MESSAGE value="修改名称显示" />
+    <MESSAGE value="添加测试类" />
+    <MESSAGE value="修改启动项和实体类结构，添加图片" />
+    <MESSAGE value="修改MD" />
+    <MESSAGE value="添加主备切换机制，待完善" />
+    <MESSAGE value="添加运行过程中主备切换，使用timer每5秒监听一次收到的消息，如果没有消息就切换到备用机" />
+    <MESSAGE value="修改主备机制，添加监听RV异常的程序广播信号，并在异常时切换监听" />
+    <MESSAGE value="修改主备切换机制，除需要刷新的异常外，其余全部启动主备切换" />
+    <MESSAGE value="修改注释，修改说明文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改注释，修改说明文件" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="2660" y="218" key="FileChooserDialogImpl" timestamp="1606966801047">
+    <state x="2472" y="184" key="#Auto_Import" timestamp="1609385228525">
       <screen x="1920" y="0" width="1920" height="1050" />
     </state>
-    <state x="2660" y="218" key="FileChooserDialogImpl/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966801047" />
-    <state width="1877" height="153" key="GridCell.Tab.0.bottom" timestamp="1606966871011">
+    <state x="2472" y="184" key="#Auto_Import/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609385228525" />
+    <state x="338" y="138" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610068187888">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="338" y="138" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610068187888" />
+    <state x="996" y="204" key="#com.intellij.ide.util.MemberChooser" timestamp="1610086998303">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="996" y="204" key="#com.intellij.ide.util.MemberChooser/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610086998303" />
+    <state x="3165" y="397" key="#com.intellij.ide.util.MemberChooser/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609922526940" />
+    <state x="572" y="180" key="#xdebugger.evaluate" timestamp="1609998073404">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="572" y="180" key="#xdebugger.evaluate/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1609998073404" />
+    <state x="2635" y="226" key="#xdebugger.evaluate/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609320866523" />
+    <state x="235" y="0" width="798" height="821" key="CommitChangelistDialog2" timestamp="1615344985185">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="235" y="0" key="CommitChangelistDialog2/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1615344985185" />
+    <state x="2449" y="118" width="798" height="821" key="CommitChangelistDialog2/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610094395894" />
+    <state width="888" height="393" key="DebuggerActiveHint" timestamp="1610089266571">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="888" height="393" key="DebuggerActiveHint/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610089266571" />
+    <state width="1109" height="494" key="DebuggerActiveHint/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609925995785" />
+    <state x="74" y="73" width="1385" height="688" key="DiffContextDialog" timestamp="1617004013477">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="74" y="73" width="1385" height="688" key="DiffContextDialog/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617004013477" />
+    <state x="2012" y="92" width="1731" height="866" key="DiffContextDialog/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609923840693" />
+    <state x="592" y="173" key="FileChooserDialogImpl" timestamp="1610512392764">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="592" y="173" key="FileChooserDialogImpl/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610512392764" />
+    <state x="2660" y="218" key="FileChooserDialogImpl/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609398250116" />
+    <state width="1493" height="194" key="GridCell.Tab.0.bottom" timestamp="1617003997409">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.0.bottom/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997409" />
+    <state width="1877" height="235" key="GridCell.Tab.0.bottom/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1616157998216" />
+    <state width="1493" height="194" key="GridCell.Tab.0.center" timestamp="1617003997408">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.0.center/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997408" />
+    <state width="1877" height="235" key="GridCell.Tab.0.center/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1616157998215" />
+    <state width="1493" height="194" key="GridCell.Tab.0.left" timestamp="1617003997408">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.0.left/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997408" />
+    <state width="1877" height="235" key="GridCell.Tab.0.left/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1616157998215" />
+    <state width="1493" height="194" key="GridCell.Tab.0.right" timestamp="1617003997408">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.0.right/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997408" />
+    <state width="1877" height="235" key="GridCell.Tab.0.right/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1616157998215" />
+    <state width="1493" height="194" key="GridCell.Tab.1.bottom" timestamp="1617003997409">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.1.bottom/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997409" />
+    <state width="1877" height="235" key="GridCell.Tab.1.bottom/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.1.bottom/0.0.1536.834@0.0.1536.834" timestamp="1616157998217" />
+    <state width="1493" height="194" key="GridCell.Tab.1.center" timestamp="1617003997409">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.1.center/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997409" />
+    <state width="1877" height="235" key="GridCell.Tab.1.center/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.1.center/0.0.1536.834@0.0.1536.834" timestamp="1616157998216" />
+    <state width="1493" height="194" key="GridCell.Tab.1.left" timestamp="1617003997409">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.1.left/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997409" />
+    <state width="1877" height="235" key="GridCell.Tab.1.left/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.1.left/0.0.1536.834@0.0.1536.834" timestamp="1616157998216" />
+    <state width="1493" height="194" key="GridCell.Tab.1.right" timestamp="1617003997409">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1493" height="194" key="GridCell.Tab.1.right/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003997409" />
+    <state width="1877" height="235" key="GridCell.Tab.1.right/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610092631782" />
+    <state width="1493" height="205" key="GridCell.Tab.1.right/0.0.1536.834@0.0.1536.834" timestamp="1616157998217" />
+    <state x="352" y="0" key="SettingsEditor" timestamp="1617003273824">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="352" y="0" key="SettingsEditor/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617003273824" />
+    <state x="2360" y="103" key="SettingsEditor/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609398251881" />
+    <state x="2732" y="240" key="VCS.ChangeListViewerDialog" timestamp="1609923800982">
       <screen x="1920" y="0" width="1920" height="1050" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.bottom/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871011" />
-    <state width="1877" height="153" key="GridCell.Tab.0.center" timestamp="1606966871010">
+    <state x="2732" y="240" key="VCS.ChangeListViewerDialog/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609923800982" />
+    <state x="2472" y="261" key="Vcs.Push.Dialog.v2" timestamp="1610094400862">
       <screen x="1920" y="0" width="1920" height="1050" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.center/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871010" />
-    <state width="1877" height="153" key="GridCell.Tab.0.left" timestamp="1606966871010">
+    <state x="442" y="207" key="Vcs.Push.Dialog.v2/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610005160285" />
+    <state x="2472" y="261" key="Vcs.Push.Dialog.v2/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610094400862" />
+    <state x="564" y="336" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1610009121179">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="564" y="336" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610009121179" />
+    <state x="2625" y="423" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609380643282" />
+    <state x="1920" y="29" width="1139" height="598" maximized="true" key="dock-window-1" timestamp="1610067945162">
       <screen x="1920" y="0" width="1920" height="1050" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.left/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871010" />
-    <state width="1877" height="153" key="GridCell.Tab.0.right" timestamp="1606966871011">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="1920" y="29" width="1139" height="598" maximized="true" key="dock-window-1/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610067945162" />
+    <state x="-46" y="5" width="1526" height="882" maximized="true" key="dock-window-1/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609923567661" />
+    <state x="8" y="0" width="1542" height="621" key="dock-window-2" timestamp="1610067945162">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.right/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871011" />
-    <state width="1877" height="153" key="GridCell.Tab.1.bottom" timestamp="1606966871011">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="8" y="0" width="1542" height="621" key="dock-window-2/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610067945162" />
+    <state x="8" y="0" width="1542" height="621" key="dock-window-2/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609395821399" />
+    <state x="221" y="125" width="939" height="631" key="find.popup" timestamp="1610089410968">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.1.bottom/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871011" />
-    <state width="1877" height="153" key="GridCell.Tab.1.center" timestamp="1606966871011">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="221" y="125" width="939" height="631" key="find.popup/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610089410968" />
+    <state x="2567" y="280" width="786" height="600" key="find.popup/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609920862831" />
+    <state x="530" y="90" key="refactoring.ChangeSignatureDialog" timestamp="1610086913241">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.1.center/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871011" />
-    <state width="1877" height="153" key="GridCell.Tab.1.left" timestamp="1606966871011">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="530" y="90" key="refactoring.ChangeSignatureDialog/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610086913241" />
+    <state x="2583" y="148" key="refactoring.ChangeSignatureDialog/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609226883543" />
+    <state x="493" y="193" key="run.anything.popup" timestamp="1610087807516">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.1.left/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871011" />
-    <state width="1877" height="153" key="GridCell.Tab.1.right" timestamp="1606966871011">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="493" y="193" key="run.anything.popup/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610087807516" />
+    <state x="2536" y="243" key="run.anything.popup/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1609918711953" />
+    <state x="498" y="180" width="672" height="539" key="search.everywhere.popup" timestamp="1617002247216">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.1.right/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966871011" />
-    <state x="2520" y="229" key="NewModule_or_Project.wizard" timestamp="1606966663690">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="498" y="180" width="672" height="539" key="search.everywhere.popup/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1617002247216" />
+    <state x="2543" y="227" width="672" height="678" key="search.everywhere.popup/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610093249192" />
+    <state x="597" y="303" key="svn.upgradeDialog" timestamp="1610509081315">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="2520" y="229" key="NewModule_or_Project.wizard/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966663690" />
-    <state x="2360" y="103" key="SettingsEditor" timestamp="1606966669551">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="597" y="303" key="svn.upgradeDialog/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610509081315" />
+    <state x="554" y="264" key="svn4idea.checkout.options" timestamp="1610509077034">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="2360" y="103" key="SettingsEditor/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966669551" />
-    <state x="2472" y="261" key="Vcs.Push.Dialog.v2" timestamp="1606966883930">
-      <screen x="1920" y="0" width="1920" height="1050" />
+    <state x="554" y="264" key="svn4idea.checkout.options/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610509077034" />
+    <state x="546" y="352" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1610172879583">
+      <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="2472" y="261" key="Vcs.Push.Dialog.v2/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1606966883930" />
+    <state x="546" y="352" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1536.834/1920.0.1920.1050@0.0.1536.834" timestamp="1610172879583" />
+    <state x="2602" y="443" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1536.834/1920.0.1920.1050@1920.0.1920.1050" timestamp="1610094130677" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/chot/utils/CustomUnblockThreadPoolExecutor.java</url>
+          <line>94</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/chot/test/demo2/tibrvclient.java</url>
+          <line>97</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/chot/test/demo2/tibrvclient.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/chot/test/demo/tibrvclient.java</url>
+          <line>111</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/chot/test/demo/tibrvclient.java</url>
+          <line>118</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/chot/test/demo/Rvlistener.java</url>
+          <line>72</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/rvDemo$Rvlistener__1_.ic" NAME="Rvlistener (1) Coverage Results" MODIFIED="1608888412682" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.chot.test.demo3.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/rvDemo$RVDemoMain.ic" NAME="RVDemoMain Coverage Results" MODIFIED="1609298210728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.chot.service.*</FILTER>
+    </SUITE>
   </component>
 </project>

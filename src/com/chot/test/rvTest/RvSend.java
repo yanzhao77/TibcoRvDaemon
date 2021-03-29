@@ -1,7 +1,11 @@
-package com.chot.test.sendAndListener;
+package com.chot.test.rvTest;
 
 import com.tibco.tibrv.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -140,15 +144,41 @@ public class RvSend {
         return i;
     }
 
-    public static void main(String[] args) {
+    /**
+     * 读取文本文件里的xml
+     *
+     * @return
+     * @throws Exception
+     */
+    private static String readXML(String filePath) throws Exception {
+        //
+        StringBuilder sb = new StringBuilder();
+        //
+        File file = new File(filePath);
+        //
+        if (file.exists() && file.isFile()) {
+            InputStreamReader rd = new InputStreamReader(new FileInputStream(
+                    file), "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(rd);
+            String str = "";
+            while ((str = bufferedReader.readLine()) != null) {
+                sb.append(str);
+            }
+            rd.close();
+        }
+        //
+        return sb.toString();
+    }
+
+
+    public static void main(String[] args) throws Exception {
         // 发送
-        //SubjectName=CHOT.G86.MES.YZ.CNMsvr Service=8400, Network=;225.16.16.4,
-        // Daemon=, WorkerWeight=1, WorkerTasks=1,
-        // SchedulerWeight=1, SchedulerHeartbeat=3.0, SchedulerActivation=5.0
         String service = "8210";
         String network = ";225.9.9.2";
         String daemon = "127.0.0.1:7500";
-        String subject = "CHOT.G86.MES.TEST.PEMsvr2";
-        RvSend rl = new RvSend(service, network, daemon, subject, "hello world");
+        String subject = "CHOT.G86.MES.TEST";
+        String filePath="F:\\xml\\GetOicMainLotList.xml";
+        String readXML = RvSend.readXML(filePath);
+        RvSend rl = new RvSend(service, network, daemon, subject,readXML);
     }
 }

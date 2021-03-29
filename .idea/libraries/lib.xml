@@ -1,15 +1,10 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/tibrvj.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/tibrvnative.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/tibrvnativesd.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/xstream-1.4.14.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/dom4j-1.6.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/tibrvjsd.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/commons-beanutils-1.8.0.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
   </library>
 </component>

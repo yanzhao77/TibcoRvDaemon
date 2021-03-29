@@ -189,9 +189,10 @@ public class RvListenerDemo {
     public static void main(String[] args) {
         RvListenerDemo rvListenerDemo = new RvListenerDemo();
 
-        String service = "1000";
-        String network =";225.1.1.1";
-        String daemons = "10.56.200.238:7500";
+        String service = "8210";
+        String network = ";225.9.9.2";
+        String daemon = "127.0.0.1:7500";
+        String subject = "CHOT.G86.MES.TEST.PEMsvr2";
 
 //        String service = "7500";
 //        String network = ";225.1.1.1";
@@ -199,7 +200,7 @@ public class RvListenerDemo {
 
         String subject2 = "DEMO.Demosvr";
         TibrvRvdTransportParameter transportParameter = rvListenerDemo.setTransportParameter(null,
-                null, service, network, daemons, false, subject2);
+                null, service, network, daemon, false, subject2);
         rvListenerDemo.start(transportParameter);
     }
 }

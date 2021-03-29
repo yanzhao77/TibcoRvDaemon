@@ -225,6 +225,12 @@ public class TibrvRvdTransportParameter {
         this.lostInterval = lostInterval;
     }
 
+    /**
+     * 获取inbox 的id
+     *
+     * @return
+     * @throws TibrvException
+     */
     public String getQueryInbox() throws TibrvException {
         if (!isStartInbox()) {
             return null;
@@ -239,6 +245,12 @@ public class TibrvRvdTransportParameter {
         return tibrvListenerMap;
     }
 
+    /**
+     * 添加实例化rv机组
+     *
+     * @param transport
+     * @param listener
+     */
     public void setTibrvListenerMap(TibrvRvdTransport transport, TibrvListener listener) {
         if (getTibrvListenerMap().get(transport) == null) {
             getTibrvListenerMap().put(transport, new ArrayList<>());

@@ -11,36 +11,36 @@
 
          #### RV 消息监听流程
 
-         ![消息监听流程](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E6%80%BB%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+![消息监听流程](resources/picture/总流程图.png)
 
 #### RV 消息监听处理架构图
 
-![消息监听处理架构图](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
+![消息监听处理架构图](resources/picture/架构图.png)
 
 #### RV 消息监听 –监听不同的service
 
 在需要监听多个service时，只需要将参数保存到集合里，遍历创建不同的TibrvTransport
 和对应的TibrvListener即可
-![监听不同的service](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E7%9B%91%E5%90%AC%E5%A4%9A%E4%B8%AAservice.png)
+![监听不同的service](resources/picture/监听多个service.png)
 
 
 #### RV 消息监听 –多个subjectName
 
 RV监听是在指定RV的service，network，deason，和指定的subjectName(可以多个)进行监听
-![多个subjectName](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E7%9B%91%E5%90%AC%E5%A4%9A%E4%B8%AAsubjectName.png)
+![多个subjectName](resources/picture/监听多个subjectName.png)
 
 #### RV 消息监听 –inbox
 
 inbox监听是在指定RV的service，network，deason后，指定点对点的进行 server –client通信
 在RV中，主要是通过创建inbox(唯一的通信地址)来实现监听
 
-![inbox创建与监听](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/inbox%E5%88%9B%E5%BB%BA%E4%B8%8E%E7%9B%91%E5%90%AC.png)
+![inbox创建与监听](resources/picture/inbox创建与监听.png)
 
 #### RV 消息处理
 
 将消息进行筛选后，使用Xstram 将类转换为对象，并输出
 
-![RV 消息处理](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.png)
+![RV 消息处理](resources/picture/消息处理.png)
 
 
 
@@ -48,7 +48,7 @@ inbox监听是在指定RV的service，network，deason后，指定点对点的�
 
 在创建TibrvTransport时，会检测是否能够创建主机是否正常。
 方法 TibrvTransport.isValid（）会返回主机的工作状态，如果主机没有打开，那么就启动备用机
-![消息监听 –静态主备机制](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E4%B8%BB%E5%A4%87%E6%9C%BA%E5%88%B6.png)
+![消息监听 –静态主备机制](resources/picture/主备机制.png)
 
 #### 监听系统通知 –动态主备机制
 
@@ -56,5 +56,5 @@ inbox监听是在指定RV的service，network，deason后，指定点对点的�
 ，在daemon发送错误信息时，根据信息情况，自动切换到备用机上
 在rv消息接收过程中，如果发送端在发送完成或者在发送过程中被关闭，守护进程会在相应的——RV.*频道进行广播告知接收端。基于此机制，可以进行监听RV系统频道。
 如果守护进程（daemon）出现发送异常信息，那么就可以根据相应的信息进行主备切换或者刷新备用机的状态信息
-![监听系统通知 –动态主备机制](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E4%B8%BB%E5%A4%87%E6%9C%BA%E5%88%B6.png)
+![监听系统通知 –动态主备机制](resources/picture/动态主备切换.png)
 
