@@ -42,6 +42,7 @@ public class MessageController {
                     } catch (TibrvException e) {
                         logger.error(e.getLocalizedMessage());
                     }
+
                 } else {
                     //如果有消息传入，则分配一个线程执行消息处理
                     customThreadPoolExecutor.execute(new Runnable() {
