@@ -10,7 +10,11 @@ import com.tibco.tibrv.*;
 
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class MessageController {
     MessageReadCallback messageRead;// 设置回调验证消息
