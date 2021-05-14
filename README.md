@@ -48,6 +48,7 @@ inbox监听是在指定RV的service，network，deason后，指定点对点的�
 
 在创建TibrvTransport时，会检测是否能够创建主机是否正常。
 方法 TibrvTransport.isValid（）会返回主机的工作状态，如果主机没有打开，那么就启动备用机
+
 ![消息监听 –静态主备机制](https://github.com/yanzhao77/rvListerDemo/blob/master/resources/picture/%E4%B8%BB%E5%A4%87%E6%9C%BA%E5%88%B6.png)
 
 #### 监听系统通知 –动态主备机制
