@@ -5,7 +5,6 @@ import com.chot.entity.daesonEntity.TibrvRvdTransportParameter;
 import com.chot.service.XmlForObjectService;
 import com.chot.service.serviceImpl.XmlForObjectServiceImpl;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
