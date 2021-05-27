@@ -5,6 +5,7 @@ import com.chot.entity.messageEntity.GetOicMainLotList;
 import com.chot.utils.LoggerUtil;
 import com.chot.utils.ParseXML;
 import com.chot.utils.XStreamUtil;
+import com.sun.xml.internal.ws.util.StringUtils;
 import com.tibco.tibrv.TibrvListener;
 import com.tibco.tibrv.TibrvMsg;
 import org.apache.log4j.Logger;
@@ -177,16 +178,16 @@ public class XMLService {
      * @return
      */
     public InputStream getStringStream(String sInputString) {
+        ByteArrayInputStream tInputStringStream=null;
         if (sInputString != null && !sInputString.trim().equals("")) {
             try {
-                ByteArrayInputStream tInputStringStream = new ByteArrayInputStream(
+                tInputStringStream  = new ByteArrayInputStream(
                         sInputString.getBytes());
-                return tInputStringStream;
             } catch (Exception ex) {
                 logger.error(ex.getLocalizedMessage(), ex.getCause());
             }
         }
-        return null;
+        return tInputStringStream;
     }
 
     /**
