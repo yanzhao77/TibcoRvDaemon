@@ -10,7 +10,7 @@ import java.util.*;
 
 public class RvListener {
     MessageReadCallback messageRead;//统一的消息处理
-    Logger logger;
+    Logger logger; //日志
     //如果这里是启动多个service，就是默认的groupKey，如果是主备机制，就是设置的groupName
     Map<String, List<TibrvRvdTransportParameter>> transportGroup;//多个server
     TibrvTransport transport;//当前正在运行的transport,(主备切换)
