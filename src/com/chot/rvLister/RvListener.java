@@ -50,8 +50,7 @@ public class RvListener {
         boolean isStartTransport = false;//判断是否启动成功
         for (String key : transportGroup.keySet()) {
             isStartTransport = false;
-            List<TibrvRvdTransportParameter> transportParameterList = new ArrayList<>();
-            transportParameterList.addAll(transportGroup.get(key));
+            List<TibrvRvdTransportParameter> transportParameterList = new ArrayList<>(transportGroup.get(key));
             //如果key是默认机组，那么启动所有的Transport，如果不是，就只启动一个
             for (TibrvRvdTransportParameter transportParameter : transportParameterList) {
                 // Create RVD transport
