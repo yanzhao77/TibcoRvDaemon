@@ -116,42 +116,17 @@ public class CustomThreadPoolExecutor {
         }
     }
 
-    private class CustomThreadFactory implements ThreadFactory {
+    private static class CustomThreadFactory implements ThreadFactory {
 
-        private AtomicInteger count = new AtomicInteger(0);
+        private final AtomicInteger count = new AtomicInteger(0);
 
         @Override
         public Thread newThread(Runnable r) {
             Thread t = new Thread(r);
-//            String threadName = "Thread" + count.addAndGet(1);
-//            t.setName(threadName);
+            String threadName = "Thread" + count.addAndGet(1);
+            t.setName(threadName);
             return t;
         }
-    }
-
-    public static void main(String[] args) {
-        CustomThreadPoolExecutor exec = new CustomThreadPoolExecutor();
-        //1. 初始化
-        exec.init();
-        ExecutorService pool = exec.getExecutor();
-
-        for (int i = 1; i < 100; i++) {
-            System.out.println("提交第" + i + "个任务");
-            int finalI = i;
-            pool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        System.out.println(">>>task is running========" + finalI);
-                        Thread.sleep(1000);
-                        boolean terminated = pool.isTerminated();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-
     }
 }
  

@@ -10,10 +10,7 @@ import com.tibco.tibrv.*;
 
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class MessageController {
@@ -102,10 +99,7 @@ public class MessageController {
         xmlService.rvlistenerInit(checkMessageName, subjectNames);
         rvlistener.setMessageRead(getMessageRead());
         Map<String, List<String[]>> stringListMap = new HashMap<>();
-        List<String[]> serviceList = new ArrayList<>();
-        for (String[] strings : serviceArr) {
-            serviceList.add(strings);
-        }
+        List<String[]> serviceList = new ArrayList<>(Arrays.asList(serviceArr));
         stringListMap.put(groupName, serviceList);
         rvlistener.setTransportParameterGroup(stringListMap, checkMessageName, isStartInbox, subjectNames);
     }

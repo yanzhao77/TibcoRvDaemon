@@ -76,30 +76,4 @@ public class CustomUnblockThreadPoolExecutor {
             return t;
         }
     }
-
-    public static void main(String[] args) {
-        CustomUnblockThreadPoolExecutor exec = new CustomUnblockThreadPoolExecutor();
-
-        //1. 初始化
-        exec.init();
-
-        ExecutorService pool = exec.getCustomThreadPoolExecutor();
-
-        for (int i = 1; i < 100; i++) {
-            System.out.println("提交第" + i + "个任务");
-            pool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        System.out.println(">>>task is running========");
-                        TimeUnit.SECONDS.sleep(10);
-                        boolean terminated = pool.isTerminated();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-
-    }
 }
