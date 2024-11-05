@@ -4,7 +4,7 @@
         <Server>TEST 1.31.01</Server>
         <Description>TEST Environment</Description>
         <FieldName>xmlData</FieldName>
-        <TimeOut>130</TimeOut>
+        <TimeOut>200</TimeOut>
         <OwnSubject>CHOT.G86.MES.TEST.OIC</OwnSubject>
         <ListenSubjectList>
             <SubjectName>CHOT.G86.MES.TEST.OIC</SubjectName>
@@ -19,6 +19,7 @@
                     <Daemon Priority="1">tcp:10.50.10.72:7500</Daemon>
                 </DaemonList>
             </Target>
+            
             <Target Name="CNM">
                 <Service>8410</Service>
                 <Network>;225.9.9.4</Network>
